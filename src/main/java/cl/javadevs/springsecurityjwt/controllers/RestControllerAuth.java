@@ -1,8 +1,6 @@
 package cl.javadevs.springsecurityjwt.controllers;
 
-import cl.javadevs.springsecurityjwt.dtos.DtoAuthRespuesta;
-import cl.javadevs.springsecurityjwt.dtos.DtoLogin;
-import cl.javadevs.springsecurityjwt.dtos.DtoRegistro;
+import cl.javadevs.springsecurityjwt.dtos.*;
 import cl.javadevs.springsecurityjwt.models.Roles;
 import cl.javadevs.springsecurityjwt.models.Usuarios;
 import cl.javadevs.springsecurityjwt.repositories.IRolesRepository;
@@ -72,13 +70,46 @@ public class RestControllerAuth {
     }
 
     //Método para poder logear un usuario y obtener un token
-    @PostMapping("login")
+    /*@PostMapping("login")
     public ResponseEntity<DtoAuthRespuesta> login(@RequestBody DtoLogin dtoLogin) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 dtoLogin.getUsername(), dtoLogin.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerador.generarToken(authentication);
         return new ResponseEntity<>(new DtoAuthRespuesta(token), HttpStatus.OK);
+    }*/
+    @PostMapping("login")
+    public ResponseEntity<Object> login(@RequestBody DtoLogin dtoLogin) {
+        try {
+            // Autenticar al usuario
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(dtoLogin.getUsername(), dtoLogin.getPassword())
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Generar el token
+            String token = jwtGenerador.generarToken(authentication);
+
+            // Obtener el rol del usuario autenticado
+            String role = authentication.getAuthorities().stream()
+                    .findFirst()
+                    .map(grantedAuthority -> grantedAuthority.getAuthority())
+                    .orElse("UNKNOWN");
+
+            // Construir la respuesta
+            return ResponseEntity.ok(new ApiResponse<>(
+                    HttpStatus.OK.value(),
+                    "Inicio de sesión exitoso",
+                    new LoginResponse(token, role)
+            ));
+        } catch (Exception e) {
+            // Manejar errores de autenticación
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    "Credenciales inválidas",
+                    null
+            ));
+        }
     }
 
 

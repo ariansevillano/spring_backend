@@ -18,31 +18,31 @@ public class RestControllerServicio {
         this.servicioService = phoneService;
     }
 
-    //Petición para crear un  celular
+    //Petición para crear un  servicio
     @PostMapping(value = "crear", headers = "Accept=application/json")
     public void crearServicio(@RequestBody Servicio servicio) {
         servicioService.crear(servicio);
     }
 
-    //Petición para obtener todos los celulares en la BD
+    //Petición para obtener todos los servicio en la BD
     @GetMapping(value = "listar", headers = "Accept=application/json")
     public List<Servicio> listarServicio() {
         return servicioService.readAll();
     }
 
-    //Petición para obtener celular mediante "ID"
+    //Petición para obtener servicio mediante "ID"
     @GetMapping(value = "listarId/{id}", headers = "Accept=application/json")
     public Optional<Servicio> obtenerServicioPorId(@PathVariable Long id) {
         return servicioService.readOne(id);
     }
 
-    //Petición para actualizar un celular
+    //Petición para actualizar un servicio
     @PutMapping(value = "actualizar", headers = "Accept=application/json")
     public void actualizarServicio(@RequestBody Servicio servicio) {
         servicioService.update(servicio);
     }
 
-    //Petición para eliminar un celular por "Id"
+    //Petición para eliminar un servicio por "Id"
     @DeleteMapping(value = "eliminar/{id}", headers = "Accept=application/json")
     public void eliminarServicio(@PathVariable Long id) {
         servicioService.delete(id);

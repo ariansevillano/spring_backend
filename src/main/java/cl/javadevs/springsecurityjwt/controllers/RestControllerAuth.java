@@ -1,6 +1,9 @@
 package cl.javadevs.springsecurityjwt.controllers;
 
-import cl.javadevs.springsecurityjwt.dtos.*;
+import cl.javadevs.springsecurityjwt.dtos.ApiResponse;
+import cl.javadevs.springsecurityjwt.dtos.DtoLogin;
+import cl.javadevs.springsecurityjwt.dtos.DtoRegistro;
+import cl.javadevs.springsecurityjwt.dtos.LoginResponse;
 import cl.javadevs.springsecurityjwt.models.Roles;
 import cl.javadevs.springsecurityjwt.models.Usuarios;
 import cl.javadevs.springsecurityjwt.repositories.IRolesRepository;
@@ -40,7 +43,7 @@ public class RestControllerAuth {
         this.jwtGenerador = jwtGenerador;
     }
     //Método para poder registrar usuarios con role "user"
-    @PostMapping("register")
+    /*@PostMapping("register")
     public ResponseEntity<String> registrar(@RequestBody DtoRegistro dtoRegistro) {
         if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {
             return new ResponseEntity<>("el usuario ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
@@ -52,13 +55,52 @@ public class RestControllerAuth {
         usuarios.setRoles(Collections.singletonList(roles));
         usuariosRepository.save(usuarios);
         return new ResponseEntity<>("Registro de usuario exitoso", HttpStatus.OK);
+    }*/
+
+    @PostMapping("register")
+    public ResponseEntity<ApiResponse<Object>> registrar(@RequestBody DtoRegistro dtoRegistro, Authentication authentication) {
+        // Validar que el usuario autenticado tenga el rol ADMIN
+        if (authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    new ApiResponse<>(HttpStatus.FORBIDDEN.value(), "Acceso denegado: solo los administradores pueden registrar usuarios", null)
+            );
+        }
+        // Verificar si el usuario ya existe
+        if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "El usuario ya existe, intenta con otro", null)
+            );
+        }
+        // Crear el nuevo usuario con rol "USER"
+        Usuarios usuarios = new Usuarios();
+        usuarios.setUsername(dtoRegistro.getUsername());
+        usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
+        Roles roles = rolesRepository.findByName("USER").orElseThrow(() ->
+                new RuntimeException("Rol USER no encontrado en la base de datos")
+        );
+        usuarios.setRoles(Collections.singletonList(roles));
+        usuariosRepository.save(usuarios);
+        // Respuesta exitosa
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiResponse<>(HttpStatus.OK.value(), "Registro de usuario exitoso", null)
+        );
     }
 
     //Método para poder guardar usuarios de tipo ADMIN
     @PostMapping("registerAdm")
-    public ResponseEntity<String> registrarAdmin(@RequestBody DtoRegistro dtoRegistro) {
+    public ResponseEntity<ApiResponse<Object>> registrarAdmin(@RequestBody DtoRegistro dtoRegistro, Authentication authentication) {
+        // Validar que el usuario autenticado tenga el rol ADMIN
+
+        if (authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    new ApiResponse<>(HttpStatus.FORBIDDEN.value(), "Acceso denegado: solo los administradores pueden registrar usuarios", null)
+            );
+        }
+
         if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {
-            return new ResponseEntity<>("el usuario ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body (
+                    new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "el usuario ya existe, intenta con otro", null)
+            );
         }
         Usuarios usuarios = new Usuarios();
         usuarios.setUsername(dtoRegistro.getUsername());
@@ -66,8 +108,9 @@ public class RestControllerAuth {
         Roles roles = rolesRepository.findByName("ADMIN").get();
         usuarios.setRoles(Collections.singletonList(roles));
         usuariosRepository.save(usuarios);
-        return new ResponseEntity<>("Registro de admin exitoso", HttpStatus.OK);
-    }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body (
+                new ApiResponse<>(HttpStatus.OK.value(), "Registro de admin exitoso",null) );
+        }
 
     //Método para poder logear un usuario y obtener un token
     /*@PostMapping("login")

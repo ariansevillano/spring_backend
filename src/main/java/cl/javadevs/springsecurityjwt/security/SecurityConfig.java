@@ -63,6 +63,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/api/servicio/listarId/**").hasAnyAuthority("ADMIN" , "USER")
                 .requestMatchers(HttpMethod.DELETE,"/api/servicio/eliminar/**").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/servicio/actualizar").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/auth/registerAdm").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/auth/register").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

@@ -40,7 +40,7 @@ public class RestControllerAuth {
         this.jwtGenerador = jwtGenerador;
     }
     //Método para poder registrar usuarios con role "user"
-    @PostMapping("register")
+    /*@PostMapping("register")
     public ResponseEntity<String> registrar(@RequestBody DtoRegistro dtoRegistro) {
         if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {
             return new ResponseEntity<>("el usuario ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
@@ -54,9 +54,9 @@ public class RestControllerAuth {
         usuarios.setRoles(Collections.singletonList(roles));
         usuariosRepository.save(usuarios);
         return new ResponseEntity<>("Registro de usuario exitoso", HttpStatus.OK);
-    }
+    }*/
 
-   /* @PostMapping("register")
+    @PostMapping("register")
     public ResponseEntity<ApiResponse<Object>> registrar(@RequestBody DtoRegistro dtoRegistro, Authentication authentication) {
         // Validar que el usuario autenticado tenga el rol ADMIN
         if (authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ADMIN"))) {
@@ -83,11 +83,11 @@ public class RestControllerAuth {
         usuariosRepository.save(usuarios);
         // Respuesta exitosa
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse<>(HttpStatus.OK.value(), "Registro de usuario exitoso", null)
+                new ApiResponse<>(HttpStatus.OK.value(), "Registro de usuario cliente exitoso", null)
         );
-    }*/
+    }
     //Método para poder guardar usuarios de tipo ADMIN
-    /*@PostMapping("registerAdm")
+    @PostMapping("registerAdm")
     public ResponseEntity<ApiResponse<Object>> registrarAdmin(@RequestBody DtoRegistro dtoRegistro, Authentication authentication ) {
 
         if (authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ADMIN"))) {
@@ -110,10 +110,10 @@ public class RestControllerAuth {
         usuarios.setRoles(Collections.singletonList(roles));
         usuariosRepository.save(usuarios);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ApiResponse<>(HttpStatus.OK.value(), "Registro de usuario administados exitoso", null)
+                new ApiResponse<>(HttpStatus.OK.value(), "Registro de usuario administador exitoso", null)
         );
-    }*/
-    @PostMapping("registerAdm")
+    }
+    /*@PostMapping("registerAdm")
     public ResponseEntity<String> registrarAdmin(@RequestBody DtoRegistro dtoRegistro) {
         if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {
             return new ResponseEntity<>("el usuario ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
@@ -127,7 +127,7 @@ public class RestControllerAuth {
         usuarios.setRoles(Collections.singletonList(roles));
         usuariosRepository.save(usuarios);
         return new ResponseEntity<>("Registro de admin exitoso", HttpStatus.OK);
-    }
+    }*/
 
     //Método para poder logear un usuario y obtener un token
     /*@PostMapping("login")

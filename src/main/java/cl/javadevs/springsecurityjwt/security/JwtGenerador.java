@@ -30,7 +30,7 @@ public class JwtGenerador {
 
         //Linea para generar el token
         String token = Jwts.builder() //Construimos un token JWT llamado token
-                .claim("username",username)//Aca establecemos el nombre de usuario que está iniciando sesión
+                .setSubject(username)//Aca establecemos el nombre de usuario que está iniciando sesión
                 .claim("nombre",nombre)
                 .claim("apellido",apellido)
                 .claim("role", role) // Agregar el rol como claim

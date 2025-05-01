@@ -1,6 +1,5 @@
 package cl.javadevs.springsecurityjwt.security;
 
-import cl.javadevs.springsecurityjwt.models.Usuarios;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,7 +20,7 @@ public class JwtGenerador {
         String username = authentication.getName();
         String nombre = userDetails.getNombre();
         String apellido = userDetails.getApellido();
-        String role = authentication.getAuthorities().stream()
+        String rol = authentication.getAuthorities().stream()
                 .findFirst()
                 .map(grantedAuthority -> grantedAuthority.getAuthority())
                 .orElse("UNKNOWN");
@@ -33,7 +32,7 @@ public class JwtGenerador {
                 .setSubject(username)//Aca establecemos el nombre de usuario que está iniciando sesión
                 .claim("nombre",nombre)
                 .claim("apellido",apellido)
-                .claim("role", role) // Agregar el rol como claim
+                .claim("rol", rol) // Agregar el rol como claim
                 .setIssuedAt(new Date()) //Establecemos la fecha de emisión del token en el momento actual
                 .setExpiration(expiracionToken) //Establecemos la fecha de caducidad del token
                 .signWith(SignatureAlgorithm.HS512, ConstantesSeguridad.JWT_FIRMA) /*Utilizamos este método para firmar

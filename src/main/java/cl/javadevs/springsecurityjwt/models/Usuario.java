@@ -12,12 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "usuario")
-public class Usuarios {
+@Table(name = "usuarios")
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
-    private Long idUsuario;
+    @Column(name = "usuario_id")
+    private Long usuario_id;
     private String username;
     private String password;
     private String nombre;
@@ -27,7 +27,7 @@ public class Usuarios {
     /*Con JoinTable estaremos creando una tabla que unirá la tabla de usuario y role, con lo cual tendremos un total de 3 tablas
     relacionadas en la tabla "usuarios_roles", a través de sus columnas usuario_id que apuntara al ID de la tabla usuario
     y role_id que apuntara al Id de la tabla role */
-    @JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id_usuario")
-    ,inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id_role"))
-    private List<Roles> roles = new ArrayList<>();
+    @JoinTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "usuario_id")
+    ,inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "rol_id"))
+    private List<Rol> roles = new ArrayList<>();
 }

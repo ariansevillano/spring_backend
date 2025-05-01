@@ -1,8 +1,8 @@
 package cl.javadevs.springsecurityjwt.controllers;
 
 import cl.javadevs.springsecurityjwt.dtos.*;
-import cl.javadevs.springsecurityjwt.models.Roles;
-import cl.javadevs.springsecurityjwt.models.Usuarios;
+import cl.javadevs.springsecurityjwt.models.Rol;
+import cl.javadevs.springsecurityjwt.models.Usuario;
 import cl.javadevs.springsecurityjwt.repositories.IRolesRepository;
 import cl.javadevs.springsecurityjwt.repositories.IUsuariosRepository;
 import cl.javadevs.springsecurityjwt.security.JwtGenerador;
@@ -45,12 +45,12 @@ public class RestControllerAuth {
         if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {
             return new ResponseEntity<>("el usuario ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
         }
-        Usuarios usuarios = new Usuarios();
+        Usuario usuarios = new Usuario();
         usuarios.setUsername(dtoRegistro.getUsername());
         usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
         usuarios.setNombre(dtoRegistro.getNombre());
         usuarios.setApellido(dtoRegistro.getApellido());
-        Roles roles = rolesRepository.findByName("USER").get();
+        Rol roles = rolesRepository.findByName("USER").get();
         usuarios.setRoles(Collections.singletonList(roles));
         usuariosRepository.save(usuarios);
         return new ResponseEntity<>("Registro de usuario exitoso", HttpStatus.OK);
@@ -61,7 +61,7 @@ public class RestControllerAuth {
         // Validar que el usuario autenticado tenga el rol ADMIN
         if (authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    new ApiResponse<>(HttpStatus.FORBIDDEN.value(), "Acceso denegado: solo los administradores pueden registrar usuarios", null)
+                    new ApiResponse<>(HttpStatus.FORBIDDEN.value(), "Acceso denegado: solo los administradores pueden registrar usuario", null)
             );
         }
         // Verificar si el usuario ya existe
@@ -71,16 +71,16 @@ public class RestControllerAuth {
             );
         }
         // Crear el nuevo usuario con rol "USER"
-        Usuarios usuarios = new Usuarios();
-        usuarios.setUsername(dtoRegistro.getUsername());
-        usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
-        usuarios.setNombre(dtoRegistro.getNombre());
-        usuarios.setApellido(dtoRegistro.getApellido());
-        Roles roles = rolesRepository.findByName("USER").orElseThrow(() ->
+        Usuario usuario = new Usuario();
+        usuario.setUsername(dtoRegistro.getUsername());
+        usuario.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
+        usuario.setNombre(dtoRegistro.getNombre());
+        usuario.setApellido(dtoRegistro.getApellido());
+        Rol rol = rolesRepository.findByName("USER").orElseThrow(() ->
                 new RuntimeException("Rol USER no encontrado en la base de datos")
         );
-        usuarios.setRoles(Collections.singletonList(roles));
-        usuariosRepository.save(usuarios);
+        usuario.setRoles(Collections.singletonList(rol));
+        usuariosRepository.save(usuario);
         // Respuesta exitosa
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse<>(HttpStatus.OK.value(), "Registro de usuario cliente exitoso", null)
@@ -92,7 +92,7 @@ public class RestControllerAuth {
 
         if (authentication.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    new ApiResponse<>(HttpStatus.FORBIDDEN.value(), "Acceso denegado: solo los administradores pueden registrar usuarios", null)
+                    new ApiResponse<>(HttpStatus.FORBIDDEN.value(), "Acceso denegado: solo los administradores pueden registrar usuario", null)
             );
         }
 
@@ -101,14 +101,14 @@ public class RestControllerAuth {
                     new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "El usuario ya existe, intenta con otro", null)
             );
         }
-        Usuarios usuarios = new Usuarios();
-        usuarios.setUsername(dtoRegistro.getUsername());
-        usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
-        usuarios.setNombre(dtoRegistro.getNombre());
-        usuarios.setApellido(dtoRegistro.getApellido());
-        Roles roles = rolesRepository.findByName("ADMIN").get();
-        usuarios.setRoles(Collections.singletonList(roles));
-        usuariosRepository.save(usuarios);
+        Usuario usuario = new Usuario();
+        usuario.setUsername(dtoRegistro.getUsername());
+        usuario.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
+        usuario.setNombre(dtoRegistro.getNombre());
+        usuario.setApellido(dtoRegistro.getApellido());
+        Rol rol = rolesRepository.findByName("ADMIN").get();
+        usuario.setRoles(Collections.singletonList(rol));
+        usuariosRepository.save(usuario);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse<>(HttpStatus.OK.value(), "Registro de usuario administador exitoso", null)
         );
@@ -118,12 +118,12 @@ public class RestControllerAuth {
         if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())) {
             return new ResponseEntity<>("el usuario ya existe, intenta con otro", HttpStatus.BAD_REQUEST);
         }
-        Usuarios usuarios = new Usuarios();
+        Usuario usuarios = new Usuario();
         usuarios.setUsername(dtoRegistro.getUsername());
         usuarios.setPassword(passwordEncoder.encode(dtoRegistro.getPassword()));
         usuarios.setNombre(dtoRegistro.getNombre());
         usuarios.setApellido(dtoRegistro.getApellido());
-        Roles roles = rolesRepository.findByName("ADMIN").get();
+        Rol roles = rolesRepository.findByName("ADMIN").get();
         usuarios.setRoles(Collections.singletonList(roles));
         usuariosRepository.save(usuarios);
         return new ResponseEntity<>("Registro de admin exitoso", HttpStatus.OK);

@@ -1,12 +1,11 @@
 package cl.javadevs.springsecurityjwt.security;
 
-import cl.javadevs.springsecurityjwt.models.Roles;
-import cl.javadevs.springsecurityjwt.models.Usuarios;
+import cl.javadevs.springsecurityjwt.models.Rol;
+import cl.javadevs.springsecurityjwt.models.Usuario;
 import cl.javadevs.springsecurityjwt.repositories.IUsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,22 +26,22 @@ public class CustomUsersDetailsService implements UserDetailsService {
 
 
     //Método para traernos una lista de autoridades por medio de una lista de roles
-    public Collection<GrantedAuthority> mapToAuthorities(List<Roles> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    public Collection<GrantedAuthority> mapToAuthorities(List<Rol> roles) {
+        return roles.stream().map(rol -> new SimpleGrantedAuthority(rol.getName())).collect(Collectors.toList());
     }
 
 
     //Método para traernos un usuario con todos sus datos por medio de sus username
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuarios usuarios = usuariosRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+        Usuario usuario = usuariosRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
         return new CustomUserDetails(
-                usuarios.getUsername(),
-                usuarios.getPassword(),
-                usuarios.getNombre(),
-                usuarios.getApellido(),
-                usuarios.getRoles().stream()
-                        .map(role -> new SimpleGrantedAuthority(role.getName()))
+                usuario.getUsername(),
+                usuario.getPassword(),
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getRoles().stream()
+                        .map(rol -> new SimpleGrantedAuthority(rol.getName()))
                         .collect(Collectors.toList()));
     }
 

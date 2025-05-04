@@ -1,6 +1,8 @@
 package cl.javadevs.springsecurityjwt.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,10 +20,23 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usuario_id")
     private Long usuario_id;
+    @NotBlank(message = "El campo username no puede estar vacío")
+    @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
+    @NotBlank(message = "El campo password no puede estar vacío")
     private String password;
+    @Column(nullable = false)
+    @NotBlank(message = "El campo nombre no puede estar vacío")
     private String nombre;
+    @Column(nullable = false)
+    @NotBlank(message = "El campo apellido no puede estar vacío")
     private String apellido;
+    @Column(nullable = false)
+    @Email(message = "El correo electrónico no es válido")
+    @NotBlank(message = "El campo email no puede estar vacío")
+    private String email;
+    private String tokenPassword;
     //Usamos fetchType en EAGER para que cada vez que se acceda o se extraiga un usuario de la BD, este se traiga todos sus roles
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     /*Con JoinTable estaremos creando una tabla que unirá la tabla de usuario y role, con lo cual tendremos un total de 3 tablas

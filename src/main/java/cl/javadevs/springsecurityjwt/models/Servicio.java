@@ -1,6 +1,7 @@
 package cl.javadevs.springsecurityjwt.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,13 @@ public class Servicio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "servicio_id")
     private Long servicio_id;
+    @Column(nullable = false)
+    @NotBlank(message = "El campo nombre no puede estar vacío")
     private String nombre;
+    @Column(nullable = false)
+    @NotBlank(message = "El campo precio no puede estar vacío")
     private Long precio;
+    @Column(nullable = false)
+    @NotBlank(message = "El campo descripción no puede estar vacío")
+    private String descripcion;
 }

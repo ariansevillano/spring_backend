@@ -1,10 +1,13 @@
 package cl.javadevs.springsecurityjwt.controllers;
 
+import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
+import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
 import cl.javadevs.springsecurityjwt.models.Servicio;
 import cl.javadevs.springsecurityjwt.services.ServicioService;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.boot.system.ApplicationPid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,31 +24,38 @@ public class RestControllerServicio {
 
     //Petición para crear un  servicio
     @PostMapping(value = "crear", headers = "Accept=application/json")
-    public void crearServicio(@RequestBody Servicio servicio) {
+    public ResponseEntity<ApiResponse<Object>> crearServicio(@RequestBody Servicio servicio) {
         servicioService.crear(servicio);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                ApiResponse.succes("Servicio creado correctamente",null)
+        );
     }
 
     //Petición para obtener todos los servicio en la BD
     @GetMapping(value = "listar", headers = "Accept=application/json")
-    public List<Servicio> listarServicio() {
-        return servicioService.readAll();
+    public ResponseEntity<ApiResponse<List<Servicio>>> listarServicio() {
+        List<Servicio> servicios = servicioService.readAll();
+        return ResponseEntity.ok(ApiResponse.succes("Lista de servicios obtenida correctamente",servicios));
     }
 
     //Petición para obtener servicio mediante "ID"
     @GetMapping(value = "listarId/{id}", headers = "Accept=application/json")
-    public Optional<Servicio> obtenerServicioPorId(@PathVariable Long id) {
-        return servicioService.readOne(id);
+    public ResponseEntity<ApiResponse<Object>> obtenerServicioPorId(@PathVariable Long id) {
+        Servicio servicio = servicioService.readOne(id).orElseThrow();
+        return ResponseEntity.ok(ApiResponse.succes("Servicio no encontrado",servicio));
     }
 
     //Petición para actualizar un servicio
     @PutMapping(value = "actualizar", headers = "Accept=application/json")
-    public void actualizarServicio(@RequestBody Servicio servicio) {
+    public ResponseEntity<ApiResponse<Object>> actualizarServicio(@RequestBody Servicio servicio) {
         servicioService.update(servicio);
+        return ResponseEntity.ok(ApiResponse.succes("Servicio Actualizado exitosamente",servicio));
     }
 
     //Petición para eliminar un servicio por "Id"
     @DeleteMapping(value = "eliminar/{id}", headers = "Accept=application/json")
-    public void eliminarServicio(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Object>> eliminarServicio(@PathVariable Long id) {
         servicioService.delete(id);
+        return ResponseEntity.ok(ApiResponse.succes("Servicio Eliminado exitosamente",null));
     }
 }

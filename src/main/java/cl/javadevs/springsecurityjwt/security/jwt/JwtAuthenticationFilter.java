@@ -1,5 +1,6 @@
-package cl.javadevs.springsecurityjwt.security;
+package cl.javadevs.springsecurityjwt.security.jwt;
 
+import cl.javadevs.springsecurityjwt.security.service.CustomUsersDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

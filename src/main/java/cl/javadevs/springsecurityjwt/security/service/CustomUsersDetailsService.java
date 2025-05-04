@@ -1,4 +1,4 @@
-package cl.javadevs.springsecurityjwt.security;
+package cl.javadevs.springsecurityjwt.security.service;
 
 import cl.javadevs.springsecurityjwt.models.Rol;
 import cl.javadevs.springsecurityjwt.models.Usuario;

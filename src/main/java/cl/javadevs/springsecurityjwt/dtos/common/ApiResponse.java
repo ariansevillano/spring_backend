@@ -1,4 +1,6 @@
-package cl.javadevs.springsecurityjwt.dtos;
+package cl.javadevs.springsecurityjwt.dtos.common;
+
+import org.apache.coyote.Response;
 
 public class ApiResponse<T> {
     private int status;
@@ -9,6 +11,14 @@ public class ApiResponse<T> {
         this.status = status;
         this.message = message;
         this.data = data;
+    }
+
+    public static <T> ApiResponse<T> succes(String message, T data){
+        return new ApiResponse<>(200,message,data);
+    }
+
+    public static <T> ApiResponse<T> error(String message, T data){
+        return new ApiResponse<>(400, message, data);
     }
 
     // Getters y Setters

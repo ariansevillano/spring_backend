@@ -1,5 +1,7 @@
-package cl.javadevs.springsecurityjwt.security;
+package cl.javadevs.springsecurityjwt.security.config;
 
+import cl.javadevs.springsecurityjwt.security.jwt.JwtAuthenticationEntryPoint;
+import cl.javadevs.springsecurityjwt.security.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,7 +65,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/api/servicio/listarId/**").hasAnyAuthority("ADMIN" , "USER")
                 .requestMatchers(HttpMethod.DELETE,"/api/servicio/eliminar/**").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/servicio/actualizar").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/auth/registerAdm").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/auth/v1/registerAdm").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/auth/register").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()

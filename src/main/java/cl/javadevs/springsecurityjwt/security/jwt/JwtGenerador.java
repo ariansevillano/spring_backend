@@ -1,5 +1,7 @@
-package cl.javadevs.springsecurityjwt.security;
+package cl.javadevs.springsecurityjwt.security.jwt;
 
+import cl.javadevs.springsecurityjwt.security.service.CustomUsersDetailsService;
+import cl.javadevs.springsecurityjwt.security.util.ConstantesSeguridad;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

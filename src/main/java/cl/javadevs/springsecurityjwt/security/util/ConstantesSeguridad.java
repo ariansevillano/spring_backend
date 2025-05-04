@@ -1,4 +1,4 @@
-package cl.javadevs.springsecurityjwt.security;
+package cl.javadevs.springsecurityjwt.security.util;
 
 public class ConstantesSeguridad {
     public static final long JWT_EXPIRATION_TOKEN = 300000; //equivale a 5 min, donde 60000 = a 1 min

@@ -1,14 +1,14 @@
-package cl.javadevs.springsecurityjwt.dtos;
+package cl.javadevs.springsecurityjwt.dtos.auth;
 
 import lombok.Data;
 
 //Esta clase va a ser la que nos devolverá la información con el token y el tipo que tenga este
 @Data
-public class DtoAuthRespuesta {
+public class AuthResponseDto {
     private String accessToken;
-    private String tokenType = "Bearer ";
+    private String tokenType = "Bearer";
 
-    public DtoAuthRespuesta(String accessToken) {
+    public AuthResponseDto(String accessToken) {
         this.accessToken = accessToken;
     }
 }

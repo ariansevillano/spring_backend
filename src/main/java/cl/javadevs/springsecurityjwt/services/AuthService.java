@@ -3,9 +3,8 @@ package cl.javadevs.springsecurityjwt.services;
 import cl.javadevs.springsecurityjwt.dtos.auth.DtoLogin;
 import cl.javadevs.springsecurityjwt.dtos.auth.DtoRegistro;
 import cl.javadevs.springsecurityjwt.dtos.auth.LoginResponseDto;
-import cl.javadevs.springsecurityjwt.exceptions.CredencialesInvalidasException;
-import cl.javadevs.springsecurityjwt.exceptions.RolNoEncontradoException;
-import cl.javadevs.springsecurityjwt.exceptions.UsuarioExistenteException;
+import cl.javadevs.springsecurityjwt.dtos.auth.ResetPasswordDto;
+import cl.javadevs.springsecurityjwt.exceptions.*;
 import cl.javadevs.springsecurityjwt.mappers.UsuarioMapper;
 import cl.javadevs.springsecurityjwt.models.Rol;
 import cl.javadevs.springsecurityjwt.models.Usuario;
@@ -23,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @Service
@@ -52,6 +52,8 @@ public class AuthService {
         if (usuariosRepository.existsByUsername(dtoRegistro.getUsername())){
             throw new UsuarioExistenteException(MensajeError.USUARIO_EXISTENTE);
         }
+        if (usuariosRepository.existsByEmail(dtoRegistro.getEmail()))
+            throw new UsuarioExistenteException(MensajeError.CORREO_EXISTENTE);
 
         // Convertir el DTO en una entidad Usuario usando el mapper
         Usuario usuario = UsuarioMapper.toEntity(dtoRegistro);
@@ -102,6 +104,32 @@ public class AuthService {
         } catch (Exception e) {
             throw new CredencialesInvalidasException(MensajeError.CREDENCIALES_INVALIDAS);
         }
+    }
+
+    public void resetPassword(ResetPasswordDto resetPasswordDto){
+        //validamos que el token no sea nulo
+        if (resetPasswordDto.getTokenPassword() == null || resetPasswordDto.getTokenPassword().isEmpty()){
+            throw new TokenInvalidoOExpiradoException(MensajeError.TOKEN_VACIO);
+        }
+
+        //validamos coincidencia de campos enviados
+        if (!resetPasswordDto.getNewPassword().equals(resetPasswordDto.getConfirmPassword()))
+            throw new CredencialesInvalidasException(MensajeError.PASSWORDS_NO_COINCIDEN);
+
+        //Buscamos al usuario por el método creado, o sea por token
+        Usuario usuario = usuariosRepository.findByTokenPassword(resetPasswordDto.getTokenPassword())
+                .orElseThrow(() -> new TokenInvalidoOExpiradoException(MensajeError.TOKEN_INVALIDO));
+
+        //Validar si el token ha expirado
+        if (usuario.getLastTokenRequest() != null && usuario.getLastTokenRequest().isBefore(LocalDateTime.now().minusHours(1))) {
+            throw new TokenInvalidoOExpiradoException(MensajeError.TOKEN_EXPIRADO);
+        }
+
+        //Actualizamos la contraseña
+        usuario.setPassword(passwordEncoder.encode(resetPasswordDto.getNewPassword()));
+        usuario.setTokenPassword(null);
+        usuario.setLastTokenRequest(null);
+        usuariosRepository.save(usuario);
     }
 
 }

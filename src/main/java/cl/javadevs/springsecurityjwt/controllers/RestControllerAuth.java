@@ -4,7 +4,9 @@ import cl.javadevs.springsecurityjwt.dtos.auth.DtoLogin;
 import cl.javadevs.springsecurityjwt.dtos.auth.DtoRegistro;
 import cl.javadevs.springsecurityjwt.dtos.auth.LoginResponseDto;
 import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
+import cl.javadevs.springsecurityjwt.dtos.auth.ResetPasswordDto;
 import cl.javadevs.springsecurityjwt.services.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,4 +105,12 @@ public class RestControllerAuth {
         }
     }
 
+
+    @PostMapping("resetPassword")
+    public ResponseEntity<ApiResponse<Object>> resetPassword(@RequestBody @Valid ResetPasswordDto resetPasswordDto){
+        authService.resetPassword(resetPasswordDto);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ApiResponse.succes("Contraseña cambiada correctamente",null)
+        );
+    }
 }

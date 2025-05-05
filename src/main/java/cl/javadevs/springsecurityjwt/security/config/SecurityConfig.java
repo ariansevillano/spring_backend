@@ -51,6 +51,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
+
                 .csrf().disable()
                 .exceptionHandling() //Permitimos el manejo de excepciones
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) //Nos establece un punto de entrada personalizado de autenticación para el manejo de autenticaciones no autorizadas
@@ -59,7 +60,9 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests() //Toda petición http debe ser autorizada
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/auth/**",
+                                "emailPassword/**")
+                        .permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/servicio/crear").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/api/servicio/listar").hasAnyAuthority("ADMIN" , "USER")
                 .requestMatchers(HttpMethod.GET,"/api/servicio/listarId/**").hasAnyAuthority("ADMIN" , "USER")

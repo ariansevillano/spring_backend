@@ -1,4 +1,4 @@
-package cl.javadevs.springsecurityjwt.emailPassword.dto;
+package cl.javadevs.springsecurityjwt.dtos.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

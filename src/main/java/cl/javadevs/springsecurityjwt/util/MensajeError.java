@@ -4,4 +4,14 @@ public class MensajeError {
     public static final String USUARIO_EXISTENTE = "El usuario ya existe, intenta con otro.";
     public static final String ROL_NO_ENCONTRADO = "Rol %s no se ha encontrado en la base de datos.";
     public static final String CREDENCIALES_INVALIDAS = "Credenciales inválidas.";
+    public static final String USUARIO_NO_EXISTENTE = "El usuario ingresado no existe.";
+    public static final String CORREO_NO_ENVIADO = "No se logró enviar el correo.";
+    public static final String CORREO_NO_COINCIDE = "El correo ingresado no coincide con el usuario.";
+    public static final String CORREO_EXISTENTE = "El correo electrónico ya está registrado.";
+    public static final String PASSWORDS_NO_COINCIDEN = "Las contraseñas no coinciden";
+    public static final String TOKEN_INVALIDO = "El token proporcionado no es válido";
+    public static final String TOKEN_EXPIRADO = "El token está expirado";
+    public static final String TOKEN_VACIO = "El token no puede estar vacio";
+
+
 }

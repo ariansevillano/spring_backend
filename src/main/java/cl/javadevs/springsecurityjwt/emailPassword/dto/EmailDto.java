@@ -1,4 +1,4 @@
-package com.example.email_send_test.dto;
+package cl.javadevs.springsecurityjwt.emailPassword.dto;
 
 
 import lombok.Data;
@@ -10,6 +10,7 @@ public class EmailDto {
     private String mailTo;
     private String subject;
     private String username;
-    private String jwt;
+    private String nombre;
+    private String tokenPassword;
 
 }

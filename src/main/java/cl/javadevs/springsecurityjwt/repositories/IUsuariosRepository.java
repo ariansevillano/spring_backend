@@ -11,6 +11,12 @@ public interface IUsuariosRepository extends JpaRepository<Usuario, Long> {
     //Método para poder buscar un usuario mediante su nombre
     Optional<Usuario> findByUsername(String username);
 
+    Optional<Usuario> findByTokenPassword(String password);
+    //Metodo para confirmar si email existe en al bd
+    Boolean existsByEmail(String email);
+
+
+
     //Método para poder verificar si un usuario existe en nuestra base de datos
     Boolean existsByUsername(String username);
 }

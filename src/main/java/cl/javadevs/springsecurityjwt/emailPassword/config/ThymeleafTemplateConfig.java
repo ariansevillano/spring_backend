@@ -1,5 +1,6 @@
-package com.example.email_send_test.config;
+package cl.javadevs.springsecurityjwt.emailPassword.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -7,6 +8,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @Configuration
 public class ThymeleafTemplateConfig {
 
+    @Bean
     public ClassLoaderTemplateResolver templateResolver(){
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setPrefix("templates/");

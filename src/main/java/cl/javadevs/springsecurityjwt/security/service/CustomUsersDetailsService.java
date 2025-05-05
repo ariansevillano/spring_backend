@@ -3,6 +3,8 @@ package cl.javadevs.springsecurityjwt.security.service;
 import cl.javadevs.springsecurityjwt.models.Rol;
 import cl.javadevs.springsecurityjwt.models.Usuario;
 import cl.javadevs.springsecurityjwt.repositories.IUsuariosRepository;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -40,6 +42,7 @@ public class CustomUsersDetailsService implements UserDetailsService {
                 usuario.getPassword(),
                 usuario.getNombre(),
                 usuario.getApellido(),
+                usuario.getEmail(),
                 usuario.getRoles().stream()
                         .map(rol -> new SimpleGrantedAuthority(rol.getName()))
                         .collect(Collectors.toList()));
@@ -52,7 +55,7 @@ public class CustomUsersDetailsService implements UserDetailsService {
         private final String nombre;
         private final String apellido;
 
-        public CustomUserDetails(String username, String password, String nombre, String apellido, Collection<? extends GrantedAuthority> authorities) {
+        public CustomUserDetails(String username, String password, String nombre, String apellido, @Email(message = "El correo electrónico no es válido") @NotBlank(message = "El campo email no puede estar vacío") String email, Collection<? extends GrantedAuthority> authorities) {
             super(username, password, authorities);
             this.nombre = nombre;
             this.apellido = apellido;

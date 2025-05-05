@@ -1,34 +1,40 @@
-package com.example.email_send_test.controller;
+package cl.javadevs.springsecurityjwt.emailPassword.controller;
 
-import com.example.email_send_test.dto.EmailDto;
-import com.example.email_send_test.service.EmailService;
+import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
+import cl.javadevs.springsecurityjwt.emailPassword.dto.EmailDto;
+import cl.javadevs.springsecurityjwt.emailPassword.service.EmailService;
+import cl.javadevs.springsecurityjwt.models.Usuario;
+import cl.javadevs.springsecurityjwt.repositories.IUsuariosRepository;
+import cl.javadevs.springsecurityjwt.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
+@RequestMapping("/emailPassword/")
+@CrossOrigin
 public class EmailController {
 
     EmailService emailService;
+
     @Autowired
     public EmailController(EmailService emailService){
         this.emailService=emailService;
     }
 
-    @GetMapping("/email/send")
-    public ResponseEntity<?> sendEmail(){
-        emailService.sendEmail();
-        return new ResponseEntity<>("Correo enviado con éxito", HttpStatus.OK);
+    @PostMapping("sendEmail")
+    public ResponseEntity<ApiResponse<Object>> sendEmail(@RequestBody EmailDto emaildto){
+        emailService.procesarEnvioCorreo(emaildto);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ApiResponse.succes("Correo enviado con éxito a su email asociado",null)
+        );
+
     }
 
-    @PostMapping("/email/sendTemplate")
-    public ResponseEntity<?> sendEmailTemplate(@RequestBody EmailDto emaildto){
-        emailService.sendEmailTemplate(emaildto);
-        return new ResponseEntity<>("Correo con plantilla enviado con éxito", HttpStatus.OK);
-    }
 
 }

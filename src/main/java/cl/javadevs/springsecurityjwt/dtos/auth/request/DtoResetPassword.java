@@ -1,10 +1,10 @@
-package cl.javadevs.springsecurityjwt.dtos.auth;
+package cl.javadevs.springsecurityjwt.dtos.auth.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class ResetPasswordDto {
+public class DtoResetPassword {
     @NotBlank(message = "El campo nueva contraseña no puede estar vacío")
     private String newPassword;
     @NotBlank(message = "El campo confirmación de contraseña no puede estar vacío")

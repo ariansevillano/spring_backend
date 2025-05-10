@@ -5,6 +5,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -31,6 +32,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleAuthenticationException(AuthenticationCredentialsNotFoundException ex) {
+        ApiResponse<Object> response = new ApiResponse<>(
+                HttpStatus.UNAUTHORIZED.value(),
+                "El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.",
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
     @ExceptionHandler(RolNoEncontradoException.class)
     public ResponseEntity<ApiResponse<Object>> handleRolNoEncontradoException(RolNoEncontradoException ex) {
         ApiResponse<Object> response = new ApiResponse<>(

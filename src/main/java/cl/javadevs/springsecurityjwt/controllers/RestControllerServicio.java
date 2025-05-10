@@ -4,10 +4,12 @@ import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
 import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
 import cl.javadevs.springsecurityjwt.models.Servicio;
 import cl.javadevs.springsecurityjwt.services.ServicioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationPid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,16 +26,27 @@ public class RestControllerServicio {
 
     //Petición para crear un  servicio
     @PostMapping(value = "crear", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> crearServicio(@RequestBody Servicio servicio) {
+    public ResponseEntity<ApiResponse<Object>> crearServicio(@RequestBody @Valid Servicio servicio, Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
+
         servicioService.crear(servicio);
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                ApiResponse.succes("Servicio creado correctamente",null)
+                ApiResponse.succes("Servicio creado correctamente", null)
         );
     }
 
     //Petición para obtener todos los servicio en la BD
     @GetMapping(value = "listar", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<List<Servicio>>> listarServicio() {
+    public ResponseEntity<ApiResponse<List<Servicio>>> listarServicio(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
         List<Servicio> servicios = servicioService.readAll();
         return ResponseEntity.ok(ApiResponse.succes("Lista de servicios obtenida correctamente",servicios));
     }

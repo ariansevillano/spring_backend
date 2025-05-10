@@ -1,6 +1,6 @@
 package cl.javadevs.springsecurityjwt.mappers;
 
-import cl.javadevs.springsecurityjwt.dtos.auth.DtoRegistro;
+import cl.javadevs.springsecurityjwt.dtos.auth.request.DtoRegistro;
 import cl.javadevs.springsecurityjwt.models.Usuario;
 
 public class UsuarioMapper {

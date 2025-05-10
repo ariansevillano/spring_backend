@@ -1,4 +1,4 @@
-package cl.javadevs.springsecurityjwt.dtos.auth;
+package cl.javadevs.springsecurityjwt.dtos.auth.request;
 
 import lombok.Data;
 

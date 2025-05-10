@@ -70,6 +70,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/servicio/actualizar").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/auth/v1/registerAdm").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/auth/register").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/auth/refreshToken").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/auth/logout").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

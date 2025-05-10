@@ -51,7 +51,7 @@ public class EmailService {
             Context context = new Context();
             Map<String, Object> model = new HashMap<>();
             model.put("userName", emailDto.getNombre());
-            model.put("url",urlFront+emailDto.getTokenPassword());
+            model.put("url", urlFront + "?token=" + emailDto.getTokenPassword());
 
             context.setVariables(model);
             String htmlText =  templateEngine.process("email-template",context);

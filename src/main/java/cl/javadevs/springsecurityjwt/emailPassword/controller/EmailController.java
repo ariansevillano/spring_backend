@@ -31,7 +31,7 @@ public class EmailController {
     public ResponseEntity<ApiResponse<Object>> sendEmail(@RequestBody EmailDto emaildto){
         emailService.procesarEnvioCorreo(emaildto);
         return ResponseEntity.status(HttpStatus.OK).body(
-                ApiResponse.succes("Correo enviado con éxito a su email asociado",null)
+                ApiResponse.succes("Correo enviado con éxito a su email asociado, recuerde revisar su carpeta de spam.",null)
         );
 
     }

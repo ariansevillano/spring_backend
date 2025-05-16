@@ -9,6 +9,8 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.management.BadBinaryOpValueExpException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -83,6 +85,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TokenInvalidoOExpiradoException.class)
     public ResponseEntity<ApiResponse<Object>> handleTokenInvalidoOExpiradoException(TokenInvalidoOExpiradoException ex){
+        ApiResponse<Object> response = new ApiResponse<>(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BarberoNoEncontradoException.class)
+    public ResponseEntity<ApiResponse<Object>> handleBarberoNoEncontradoException(BarberoNoEncontradoException ex){
         ApiResponse<Object> response = new ApiResponse<>(
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getMessage(),

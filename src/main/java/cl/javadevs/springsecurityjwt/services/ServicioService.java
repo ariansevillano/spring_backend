@@ -18,28 +18,24 @@ public class ServicioService {
         this.servicioRepo = servicioRepo;
     }
 
-    //Creamos un celular
+
     public void crear(Servicio servicio) {
         servicioRepo.save(servicio);
     }
 
-    //Obtenemos toda una lista de celulares
     public List<Servicio> readAll() {
         return servicioRepo.findAll();
     }
 
-    //Obtenemos un celular por su id
     public Optional<Servicio> readOne(Long id) {
         return Optional.ofNullable(servicioRepo.findById(id)
                 .orElseThrow(() -> new ServicioNoEncontradoException("Servicio no encontrado con Id: "+id)));
     }
 
-    //Actualizamos un celular
     public void update(Servicio servicio) {
         servicioRepo.save(servicio);
     }
 
-    //Eliminamos un celular
     public void delete(Long id) {
         if (!servicioRepo.existsById(id)) {
             throw new ServicioNoEncontradoException("No se puede eliminar. Servicio no encontrado con Id: " + id);

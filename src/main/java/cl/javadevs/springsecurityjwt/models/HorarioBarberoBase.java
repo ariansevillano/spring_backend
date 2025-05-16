@@ -1,5 +1,6 @@
 package cl.javadevs.springsecurityjwt.models;
 
+import cl.javadevs.springsecurityjwt.util.DiaSemana;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,8 +22,9 @@ public class HorarioBarberoBase {
     @ManyToOne
     @JoinColumn(name = "tipoHorario_id", nullable = false)
     private TipoHorario tipoHorario;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String dia;
+    private DiaSemana dia;
     //hace referenica a activo en el horario o descanso, o sea 1 = trabaja en dicho horario, null = descansa
     private Integer est_id;
     //hace referencia a trabajador activado, o sea 1 = normal, 0 = apagado o despedido para ya no usarse

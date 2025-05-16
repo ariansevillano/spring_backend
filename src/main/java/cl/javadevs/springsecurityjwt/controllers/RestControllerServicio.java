@@ -20,8 +20,8 @@ import java.util.Optional;
 public class RestControllerServicio {
     private ServicioService servicioService;
     @Autowired
-    public RestControllerServicio(ServicioService phoneService) {
-        this.servicioService = phoneService;
+    public RestControllerServicio(ServicioService servicioService) {
+        this.servicioService = servicioService;
     }
 
     //Petición para crear un  servicio
@@ -32,7 +32,6 @@ public class RestControllerServicio {
                     ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
             );
         }
-
         servicioService.crear(servicio);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponse.succes("Servicio creado correctamente", null)

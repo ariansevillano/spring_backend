@@ -27,8 +27,7 @@ public class Servicio {
     @NotBlank(message = "El campo descripción no puede estar vacío")
     private String descripcion;
     @ManyToOne
-    @JoinColumn(name = "tipoServicio_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "tipoServicio_id",nullable = false)
     @NotNull(message = "El campo tipoServicio no puede estar vacío")
     private TipoServicio tipoServicio;
 }

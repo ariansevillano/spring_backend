@@ -1,4 +1,4 @@
-package cl.javadevs.springsecurityjwt.dtos.auth.request;
+package cl.javadevs.springsecurityjwt.dtos.barbero.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

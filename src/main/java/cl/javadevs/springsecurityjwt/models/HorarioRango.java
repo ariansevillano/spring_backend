@@ -19,7 +19,6 @@ public class HorarioRango {
     @Column(nullable = false)
     private String rango;
     @ManyToOne
-    @JoinColumn( name = "tipoHorario_id")
-    @Column(nullable = false)
+    @JoinColumn( name = "tipoHorario_id",nullable = false)
     private TipoHorario tipoHorario;
 }

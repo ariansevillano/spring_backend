@@ -21,8 +21,7 @@ public class Valoracion {
     private Boolean util;
     private String mensaje;
     @ManyToOne
-    @JoinColumn( name = "usuario_id")
-    @Column(nullable = false)
+    @JoinColumn( name = "usuario_id",nullable = false)
     private Usuario usuario;
 
 }

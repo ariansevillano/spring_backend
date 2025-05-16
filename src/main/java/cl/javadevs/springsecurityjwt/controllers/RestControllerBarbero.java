@@ -1,11 +1,11 @@
 package cl.javadevs.springsecurityjwt.controllers;
 
 
+import cl.javadevs.springsecurityjwt.dtos.barbero.request.DtoBarbero;
+import cl.javadevs.springsecurityjwt.dtos.barbero.response.DtoBarberoResponse;
 import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
 import cl.javadevs.springsecurityjwt.models.Barbero;
-import cl.javadevs.springsecurityjwt.models.Servicio;
 import cl.javadevs.springsecurityjwt.services.BarberoService;
-import cl.javadevs.springsecurityjwt.services.ServicioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,40 +25,40 @@ public class RestControllerBarbero {
     }
 
     @PostMapping(value = "crear", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> crearBarbero(@RequestBody @Valid Barbero barbero, Authentication authentication) {
+    public ResponseEntity<ApiResponse<Object>> crearBarbero(@RequestBody @Valid DtoBarbero dtoBarbero, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
             );
         }
 
-        barberoService.crear(barbero);
+        barberoService.crear(dtoBarbero);
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                ApiResponse.succes("Servicio creado correctamente", null)
+                ApiResponse.succes("Barbero creado correctamente", null)
         );
     }
 
     @GetMapping(value = "listar", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<List<Barbero>>> listarBarbero(Authentication authentication) {
+    public ResponseEntity<ApiResponse<List<DtoBarberoResponse>>> listarBarbero(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
             );
         }
-        List<Barbero> barberos = barberoService.readAll();
+        List<DtoBarberoResponse> barberos = barberoService.readAll();
         return ResponseEntity.ok(ApiResponse.succes("Lista de barberos obtenida correctamente",barberos));
     }
 
-    @GetMapping(value = "listarId/{id}", headers = "Accept=application/json")
+    /*@GetMapping(value = "listarId/{id}", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<Object>> obtenerBarberoPorId(@PathVariable Long id) {
         Barbero barbero = barberoService.readOne(id).orElseThrow();
         return ResponseEntity.ok(ApiResponse.succes("Barbero no encontrado",barbero));
-    }
+    }*/
 
-    @PutMapping(value = "actualizar", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> actualizarBarbero(@RequestBody Barbero barbero) {
-        barberoService.update(barbero);
-        return ResponseEntity.ok(ApiResponse.succes("Barbero Actualizado exitosamente",barbero);
+    @PutMapping(value = "actualizar/{id}", headers = "Accept=application/json")
+    public ResponseEntity<ApiResponse<Object>> actualizarBarbero(@PathVariable Long id,@RequestBody @Valid DtoBarbero dtoBarbero) {
+        barberoService.update(id,dtoBarbero);
+        return ResponseEntity.ok(ApiResponse.succes("Barbero Actualizado exitosamente",dtoBarbero));
     }
 
     @DeleteMapping(value = "eliminar/{id}", headers = "Accept=application/json")

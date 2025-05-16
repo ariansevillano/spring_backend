@@ -77,6 +77,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/api/barbero/listarId/**").hasAnyAuthority("ADMIN" , "USER")
                 .requestMatchers(HttpMethod.DELETE,"/api/barbero/eliminar/**").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/barbero/actualizar").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/valoracion/crear").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET,"/api/valoracion/listar").hasAnyAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

@@ -76,7 +76,7 @@ public class EmailService {
 
         // Verificar si ya se generó un token recientemente
         if (usuario.getLastTokenRequest() != null && usuario.getLastTokenRequest().isAfter(LocalDateTime.now().minusMinutes(5))) {
-            throw new RuntimeException("Ya se ha solicitado un token recientemente. Intenta nuevamente más tarde.");
+            throw new EmailNoEnviadoException(MensajeError.CORREO_RECIENTE);
         }
 
         //Generamos el token de restablecimiento y actualizamos el campo

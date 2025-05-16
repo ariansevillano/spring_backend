@@ -1,19 +1,20 @@
 package cl.javadevs.springsecurityjwt.models;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "roles")
-public class Rol {
+@Table(name = "tipo_horarios")
+public class TipoHorario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rol_id")
-    private Long rol_id;
+    @Column(name = "tipoHorario_Id")
+    private Long tipoHorario_id;
     @Column(nullable = false)
-    private String name;
+    private String nombre;
 }

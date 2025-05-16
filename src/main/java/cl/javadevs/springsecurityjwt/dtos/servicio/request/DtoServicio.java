@@ -14,5 +14,5 @@ public class DtoServicio {
     @NotBlank(message = "El campo descripción no puede estar vacío")
     private String descripcion;
     @NotNull(message = "El campo tipoServicio no puede estar vacío")
-    private TipoServicio tipoServicio;
+    private Long tipoServicio_id;
 }

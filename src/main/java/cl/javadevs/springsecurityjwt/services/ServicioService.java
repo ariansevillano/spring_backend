@@ -5,7 +5,9 @@ import cl.javadevs.springsecurityjwt.dtos.servicio.response.DtoServicioResponse;
 import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
 import cl.javadevs.springsecurityjwt.exceptions.UsuarioExistenteException;
 import cl.javadevs.springsecurityjwt.models.Servicio;
+import cl.javadevs.springsecurityjwt.models.TipoServicio;
 import cl.javadevs.springsecurityjwt.repositories.IServicioRepository;
+import cl.javadevs.springsecurityjwt.repositories.ITipoServicioRepository;
 import cl.javadevs.springsecurityjwt.util.MensajeError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,11 @@ import java.util.Optional;
 @Service
 public class ServicioService {
     private IServicioRepository servicioRepo;
-
+    private ITipoServicioRepository tipoServicioRepository;
     @Autowired
-    public ServicioService(IServicioRepository servicioRepo) {
+    public ServicioService(IServicioRepository servicioRepo, ITipoServicioRepository tipoServicioRepository) {
         this.servicioRepo = servicioRepo;
+        this.tipoServicioRepository = tipoServicioRepository;
     }
 
 
@@ -28,7 +31,9 @@ public class ServicioService {
         servicio.setNombre(dtoServicio.getNombre());
         servicio.setPrecio(dtoServicio.getPrecio());
         servicio.setDescripcion(dtoServicio.getDescripcion());
-        servicio.setTipoServicio(dtoServicio.getTipoServicio());
+        TipoServicio tipoServicio = tipoServicioRepository.findById(dtoServicio.getTipoServicio_id())
+                .orElseThrow(() -> new ServicioNoEncontradoException(MensajeError.TIPO_SERVICIO_NO_ENCONTRADO));
+        servicio.setTipoServicio(tipoServicio);
         servicioRepo.save(servicio);
     }
 
@@ -62,7 +67,9 @@ public class ServicioService {
         servicio.setNombre(dtoServicio.getNombre());
         servicio.setPrecio(dtoServicio.getPrecio());
         servicio.setDescripcion(dtoServicio.getDescripcion());
-        servicio.setTipoServicio(dtoServicio.getTipoServicio());
+        TipoServicio tipoServicio = tipoServicioRepository.findById(dtoServicio.getTipoServicio_id())
+                .orElseThrow(() -> new ServicioNoEncontradoException(MensajeError.TIPO_SERVICIO_NO_ENCONTRADO));
+        servicio.setTipoServicio(tipoServicio);
         servicioRepo.save(servicio);
     }
 

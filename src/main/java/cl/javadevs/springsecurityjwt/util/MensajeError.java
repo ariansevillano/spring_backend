@@ -13,5 +13,7 @@ public class MensajeError {
     public static final String TOKEN_EXPIRADO = "El token está expirado";
     public static final String TOKEN_VACIO = "El token no puede estar vacio";
     public static final String CORREO_RECIENTE = "Ya se ha solicitado un token recientemente. Intenta nuevamente más tarde.";
+    public static final String SERVICIO_NO_ENCONTRADO = "Servicio solicitado no encontrado";
+    public static final String BARBERO_NO_ENCONTRADO = "Barbero no encontrado";
 
 }

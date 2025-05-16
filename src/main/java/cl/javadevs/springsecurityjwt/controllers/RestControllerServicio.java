@@ -1,6 +1,8 @@
 package cl.javadevs.springsecurityjwt.controllers;
 
 import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
+import cl.javadevs.springsecurityjwt.dtos.servicio.request.DtoServicio;
+import cl.javadevs.springsecurityjwt.dtos.servicio.response.DtoServicioResponse;
 import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
 import cl.javadevs.springsecurityjwt.models.Servicio;
 import cl.javadevs.springsecurityjwt.services.ServicioService;
@@ -26,13 +28,13 @@ public class RestControllerServicio {
 
     //Petición para crear un  servicio
     @PostMapping(value = "crear", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> crearServicio(@RequestBody @Valid Servicio servicio, Authentication authentication) {
+    public ResponseEntity<ApiResponse<Object>> crearServicio(@RequestBody @Valid DtoServicio dtoServicio, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
             );
         }
-        servicioService.crear(servicio);
+        servicioService.crear(dtoServicio);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponse.succes("Servicio creado correctamente", null)
         );
@@ -40,28 +42,28 @@ public class RestControllerServicio {
 
     //Petición para obtener todos los servicio en la BD
     @GetMapping(value = "listar", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<List<Servicio>>> listarServicio(Authentication authentication) {
+    public ResponseEntity<ApiResponse<List<DtoServicioResponse>>> listarServicio(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
             );
         }
-        List<Servicio> servicios = servicioService.readAll();
-        return ResponseEntity.ok(ApiResponse.succes("Lista de servicios obtenida correctamente",servicios));
+        List<DtoServicioResponse> dtoServicios = servicioService.readAll();
+        return ResponseEntity.ok(ApiResponse.succes("Lista de servicios obtenida correctamente",dtoServicios));
     }
 
     //Petición para obtener servicio mediante "ID"
     @GetMapping(value = "listarId/{id}", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> obtenerServicioPorId(@PathVariable Long id) {
-        Servicio servicio = servicioService.readOne(id).orElseThrow();
-        return ResponseEntity.ok(ApiResponse.succes("Servicio no encontrado",servicio));
+    public ResponseEntity<ApiResponse<DtoServicioResponse>> obtenerServicioPorId(@PathVariable Long id) {
+        DtoServicioResponse dtoServicio = servicioService.readOne(id);
+        return ResponseEntity.ok(ApiResponse.succes("Servicio no encontrado",dtoServicio));
     }
 
     //Petición para actualizar un servicio
-    @PutMapping(value = "actualizar", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> actualizarServicio(@RequestBody Servicio servicio) {
-        servicioService.update(servicio);
-        return ResponseEntity.ok(ApiResponse.succes("Servicio Actualizado exitosamente",servicio));
+    @PutMapping(value = "actualizar/{id}", headers = "Accept=application/json")
+    public ResponseEntity<ApiResponse<Object>> actualizarServicio(@PathVariable Long id ,@RequestBody DtoServicio dtoServicio) {
+        servicioService.update(id,dtoServicio);
+        return ResponseEntity.ok(ApiResponse.succes("Servicio Actualizado exitosamente",dtoServicio));
     }
 
     //Petición para eliminar un servicio por "Id"

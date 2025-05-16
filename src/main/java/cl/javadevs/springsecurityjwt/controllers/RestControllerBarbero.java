@@ -49,11 +49,11 @@ public class RestControllerBarbero {
         return ResponseEntity.ok(ApiResponse.succes("Lista de barberos obtenida correctamente",barberos));
     }
 
-    /*@GetMapping(value = "listarId/{id}", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> obtenerBarberoPorId(@PathVariable Long id) {
-        Barbero barbero = barberoService.readOne(id).orElseThrow();
-        return ResponseEntity.ok(ApiResponse.succes("Barbero no encontrado",barbero));
-    }*/
+    @GetMapping(value = "listarId/{id}", headers = "Accept=application/json")
+    public ResponseEntity<ApiResponse<DtoBarberoResponse>> obtenerBarberoPorId(@PathVariable Long id) {
+        DtoBarberoResponse dtoBarberoResponse = barberoService.readOne(id);
+        return ResponseEntity.ok(ApiResponse.succes("Barbero no encontrado",dtoBarberoResponse));
+    }
 
     @PutMapping(value = "actualizar/{id}", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<Object>> actualizarBarbero(@PathVariable Long id,@RequestBody @Valid DtoBarbero dtoBarbero) {

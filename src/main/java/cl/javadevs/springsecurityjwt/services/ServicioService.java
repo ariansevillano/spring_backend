@@ -1,8 +1,12 @@
 package cl.javadevs.springsecurityjwt.services;
 
+import cl.javadevs.springsecurityjwt.dtos.servicio.request.DtoServicio;
+import cl.javadevs.springsecurityjwt.dtos.servicio.response.DtoServicioResponse;
 import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
+import cl.javadevs.springsecurityjwt.exceptions.UsuarioExistenteException;
 import cl.javadevs.springsecurityjwt.models.Servicio;
 import cl.javadevs.springsecurityjwt.repositories.IServicioRepository;
+import cl.javadevs.springsecurityjwt.util.MensajeError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,20 +23,46 @@ public class ServicioService {
     }
 
 
-    public void crear(Servicio servicio) {
+    public void crear(DtoServicio dtoServicio) {
+        Servicio servicio = new Servicio();
+        servicio.setNombre(dtoServicio.getNombre());
+        servicio.setPrecio(dtoServicio.getPrecio());
+        servicio.setDescripcion(dtoServicio.getDescripcion());
+        servicio.setTipoServicio(dtoServicio.getTipoServicio());
         servicioRepo.save(servicio);
     }
 
-    public List<Servicio> readAll() {
-        return servicioRepo.findAll();
+    public List<DtoServicioResponse> readAll() {
+        List<Servicio> servicios = servicioRepo.findAll();
+        return servicios.stream().map(servicio -> {
+            DtoServicioResponse dto = new DtoServicioResponse();
+            dto.setServicio_id(servicio.getServicio_id());
+            dto.setNombre(servicio.getNombre());
+            dto.setPrecio(servicio.getPrecio());
+            dto.setDescripcion(servicio.getDescripcion());
+            dto.setNombre_tipoServicio(servicio.getTipoServicio().getNombre());
+            return dto;
+        }).toList();
     }
 
-    public Optional<Servicio> readOne(Long id) {
-        return Optional.ofNullable(servicioRepo.findById(id)
-                .orElseThrow(() -> new ServicioNoEncontradoException("Servicio no encontrado con Id: "+id)));
+    public DtoServicioResponse readOne(Long id) {
+        Servicio servicio = servicioRepo.findById(id)
+                .orElseThrow(()-> new UsuarioExistenteException(MensajeError.USUARIO_NO_EXISTENTE));
+        DtoServicioResponse dto = new DtoServicioResponse();
+        dto.setServicio_id(servicio.getServicio_id());
+        dto.setNombre(servicio.getNombre());
+        dto.setDescripcion(servicio.getDescripcion());
+        dto.setNombre_tipoServicio(servicio.getTipoServicio().getNombre());
+        return dto;
     }
 
-    public void update(Servicio servicio) {
+    public void update(Long id, DtoServicio dtoServicio) {
+        Servicio servicio = servicioRepo.findById(id)
+                        .orElseThrow(()-> new ServicioNoEncontradoException(MensajeError.SERVICIO_NO_ENCONTRADO));
+        servicio.setNombre(dtoServicio.getNombre());
+        servicio.setPrecio(dtoServicio.getPrecio());
+        servicio.setDescripcion(dtoServicio.getDescripcion());
+        servicio.setTipoServicio(dtoServicio.getTipoServicio());
         servicioRepo.save(servicio);
     }
 

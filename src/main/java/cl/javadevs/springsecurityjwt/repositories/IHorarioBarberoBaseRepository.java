@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface IHorarioBarberoBaseRepository extends JpaRepository<HorarioBarberoBase,Long> {
 
-    List<HorarioBarberoBase> findByDiaSemana(DiaSemana dia);
+    List<HorarioBarberoBase> findByDia(DiaSemana dia);
 }

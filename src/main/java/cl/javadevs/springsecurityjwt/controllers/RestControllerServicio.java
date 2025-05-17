@@ -22,7 +22,8 @@ import java.util.Optional;
 @RequestMapping("/api/servicio/")
 @RequiredArgsConstructor
 public class RestControllerServicio {
-    private ServicioService servicioService;
+
+    private final ServicioService servicioService;
 
     //Petición para crear un  servicio
     @PostMapping(value = "crear", headers = "Accept=application/json")

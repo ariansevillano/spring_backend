@@ -3,6 +3,7 @@ package cl.javadevs.springsecurityjwt.services;
 import cl.javadevs.springsecurityjwt.dtos.horarioInstancia.response.DtoHorarioBarberoInstanciaResponse;
 import cl.javadevs.springsecurityjwt.repositories.IHorarioBarberoInstanciaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HorarioBarberoInstanciaService {
 
-    private IHorarioBarberoInstanciaRepository horarioBarberoInstanciaRepository;
+    private final IHorarioBarberoInstanciaRepository horarioBarberoInstanciaRepository;
 
     public Map<String, List<DtoHorarioBarberoInstanciaResponse>> obtenerInstanciasAgrupadasPorDiaSemanaActual() {
         LocalDate hoy = LocalDate.now();

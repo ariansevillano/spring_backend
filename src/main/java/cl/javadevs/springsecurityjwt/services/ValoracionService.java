@@ -19,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ValoracionService {
 
-    private IUsuariosRepository usuariosRepository;
-    private IValoracionRepository valoracionRepository;
+    private final IUsuariosRepository usuariosRepository;
+    private final IValoracionRepository valoracionRepository;
 
     public void crear(DtoValoracion dtoValoracion, Authentication authentication) {
         String username = authentication.getName();

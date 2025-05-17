@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/api/barbero/")
 @RequiredArgsConstructor
 public class RestControllerBarbero {
-    private BarberoService barberoService;
+    private final BarberoService barberoService;
 
     @PostMapping(value = "crear", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<Object>> crearBarbero(@RequestBody @Valid DtoBarbero dtoBarbero, Authentication authentication) {

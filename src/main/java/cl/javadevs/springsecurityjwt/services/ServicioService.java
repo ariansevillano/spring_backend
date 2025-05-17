@@ -19,8 +19,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ServicioService {
-    private IServicioRepository servicioRepo;
-    private ITipoServicioRepository tipoServicioRepository;
+    private final IServicioRepository servicioRepo;
+    private final ITipoServicioRepository tipoServicioRepository;
 
     public void crear(DtoServicio dtoServicio) {
         Servicio servicio = new Servicio();

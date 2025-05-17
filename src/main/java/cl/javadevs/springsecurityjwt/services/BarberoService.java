@@ -20,9 +20,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BarberoService {
 
-    private IBarberoRepository barberoRepository;
-    private AuthenticationManager authenticationManager;
-    private HorarioBarberoBaseService horarioBarberoBaseService;
+    private final IBarberoRepository barberoRepository;
+    private final AuthenticationManager authenticationManager;
+    private final HorarioBarberoBaseService horarioBarberoBaseService;
 
     public void crear(DtoBarbero dtoBarbero){
         Barbero barbero = new Barbero();

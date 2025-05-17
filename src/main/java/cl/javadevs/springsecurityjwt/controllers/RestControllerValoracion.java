@@ -19,7 +19,8 @@ import java.util.List;
 @RequestMapping("/api/valoracion/")
 @RequiredArgsConstructor
 public class RestControllerValoracion {
-    private ValoracionService valoracionService;
+
+    private final ValoracionService valoracionService;
 
     @PostMapping(value = "crear", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<Object>> crearValoracion(@RequestBody @Valid DtoValoracion dtoValoracion, Authentication authentication) {

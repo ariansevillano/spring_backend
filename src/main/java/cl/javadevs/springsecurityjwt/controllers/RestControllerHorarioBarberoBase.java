@@ -4,6 +4,7 @@ import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
 import cl.javadevs.springsecurityjwt.dtos.horarioBase.DtoHorarioBase;
 import cl.javadevs.springsecurityjwt.services.HorarioBarberoBaseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/horarioBarberoBase/")
 @RequiredArgsConstructor
 public class RestControllerHorarioBarberoBase {
-    private HorarioBarberoBaseService horarioBarberoBaseService;
+    private final HorarioBarberoBaseService horarioBarberoBaseService;
+
 
     @PutMapping("actualizarTurnosDia")
     public ResponseEntity<ApiResponse<Object>> actualizarTurnosDia(@RequestBody DtoHorarioBase dtoHorarioBase){

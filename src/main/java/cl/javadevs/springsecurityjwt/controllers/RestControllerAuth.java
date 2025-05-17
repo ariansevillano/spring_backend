@@ -26,7 +26,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RestControllerAuth {
 
-    private AuthService authService;
+    private final AuthService authService;
 
     //endpoint mejorado para crear un usuario tipo USER
     @PostMapping("register")

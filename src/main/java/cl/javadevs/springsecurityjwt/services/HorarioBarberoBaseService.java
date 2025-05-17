@@ -32,10 +32,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HorarioBarberoBaseService {
 
-    private IHorarioBarberoBaseRepository horarioBarberoBaseRepository;
-    private IBarberoRepository barberoRepository;
-    private ITipoHorarioRepository tipoHorarioRepository;
-    private IHorarioBarberoInstanciaRepository horarioBarberoInstanciaRepository;
+    private final IHorarioBarberoBaseRepository horarioBarberoBaseRepository;
+    private final IBarberoRepository barberoRepository;
+    private final ITipoHorarioRepository tipoHorarioRepository;
+    private final IHorarioBarberoInstanciaRepository horarioBarberoInstanciaRepository;
+
 
     public void crearHorarioBaseInicial(Long barbero_id){
         List<HorarioBarberoBase> horarios = new ArrayList<>();
@@ -63,7 +64,7 @@ public class HorarioBarberoBaseService {
         DiaSemana dia =  dtoHorarioBase.getDia();
         Map<Long,List<Long>> turnosPorTipo = dtoHorarioBase.getTurnosPorTipo();
 
-        List<HorarioBarberoBase> registrosDia = horarioBarberoBaseRepository.findByDiaSemana(dia);
+        List<HorarioBarberoBase> registrosDia = horarioBarberoBaseRepository.findByDia(dia);
 
         for (HorarioBarberoBase registro : registrosDia){
             Long tipoHorarioId = registro.getTipoHorario().getTipoHorario_id();
@@ -80,6 +81,7 @@ public class HorarioBarberoBaseService {
         horarioBarberoBaseRepository.saveAll(registrosDia);
     }
 
+    @Transactional
     public void confirmarHorarioBaseParaSemanasSiguientes(){
 
         LocalDate proximoLunes = obtenerProximoLunes();

@@ -7,6 +7,7 @@ import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
 import cl.javadevs.springsecurityjwt.models.Barbero;
 import cl.javadevs.springsecurityjwt.services.BarberoService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/barbero/")
+@RequiredArgsConstructor
 public class RestControllerBarbero {
     private BarberoService barberoService;
-    @Autowired
-    public RestControllerBarbero(BarberoService barberoService) {
-        this.barberoService = barberoService;
-    }
 
     @PostMapping(value = "crear", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<Object>> crearBarbero(@RequestBody @Valid DtoBarbero dtoBarbero, Authentication authentication) {

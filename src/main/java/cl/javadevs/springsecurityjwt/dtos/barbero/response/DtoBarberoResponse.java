@@ -1,6 +1,7 @@
 package cl.javadevs.springsecurityjwt.dtos.barbero.response;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
 public class DtoBarberoResponse {

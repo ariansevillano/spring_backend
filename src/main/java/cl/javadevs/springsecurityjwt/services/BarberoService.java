@@ -6,7 +6,9 @@ import cl.javadevs.springsecurityjwt.dtos.servicio.response.DtoServicioResponse;
 import cl.javadevs.springsecurityjwt.exceptions.BarberoNoEncontradoException;
 import cl.javadevs.springsecurityjwt.models.Barbero;
 import cl.javadevs.springsecurityjwt.repositories.IBarberoRepository;
+import cl.javadevs.springsecurityjwt.repositories.IHorarioBarberoBaseRepository;
 import cl.javadevs.springsecurityjwt.util.MensajeError;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
@@ -15,20 +17,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BarberoService {
 
     private IBarberoRepository barberoRepository;
     private AuthenticationManager authenticationManager;
-    @Autowired
-    public BarberoService(IBarberoRepository barberoRepository) {
-        this.barberoRepository = barberoRepository;
-    }
+    private HorarioBarberoBaseService horarioBarberoBaseService;
 
     public void crear(DtoBarbero dtoBarbero){
         Barbero barbero = new Barbero();
         barbero.setNombre(dtoBarbero.getNombre());
         barbero.setEstado(1);
         barberoRepository.save(barbero);
+        horarioBarberoBaseService.crearHorarioBaseInicial(barbero.getBarbero_id());
     }
 
     public List<DtoBarberoResponse> readAll(){

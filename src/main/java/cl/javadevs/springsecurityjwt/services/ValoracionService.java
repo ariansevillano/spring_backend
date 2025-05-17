@@ -8,6 +8,7 @@ import cl.javadevs.springsecurityjwt.models.Valoracion;
 import cl.javadevs.springsecurityjwt.repositories.IUsuariosRepository;
 import cl.javadevs.springsecurityjwt.repositories.IValoracionRepository;
 import cl.javadevs.springsecurityjwt.util.MensajeError;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -15,16 +16,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ValoracionService {
 
     private IUsuariosRepository usuariosRepository;
     private IValoracionRepository valoracionRepository;
-
-    @Autowired
-    public ValoracionService(IValoracionRepository valoracionRepository, IUsuariosRepository usuariosRepository) {
-        this.valoracionRepository = valoracionRepository;
-        this.usuariosRepository = usuariosRepository;
-    }
 
     public void crear(DtoValoracion dtoValoracion, Authentication authentication) {
         String username = authentication.getName();

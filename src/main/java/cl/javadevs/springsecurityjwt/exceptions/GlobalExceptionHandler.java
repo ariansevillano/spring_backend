@@ -103,4 +103,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(TipoHorarioNoEncotradoException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTipoHorarioNoEncotradoException(TipoHorarioNoEncotradoException ex){
+        ApiResponse<Object> response = new ApiResponse<>(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

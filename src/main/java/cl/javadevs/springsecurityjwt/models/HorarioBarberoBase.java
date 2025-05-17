@@ -25,7 +25,7 @@ public class HorarioBarberoBase {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DiaSemana dia;
-    //hace referenica a activo en el horario o descanso, o sea 1 = trabaja en dicho horario, null = descansa
+    //hace referenica a activo en el horarioInstancia o descanso, o sea 1 = trabaja en dicho horarioInstancia, null = descansa
     private Integer est_id;
     //hace referencia a trabajador activado, o sea 1 = normal, 0 = apagado o despedido para ya no usarse
     private Integer estado;

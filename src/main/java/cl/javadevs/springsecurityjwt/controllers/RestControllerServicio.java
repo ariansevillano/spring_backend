@@ -7,6 +7,7 @@ import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
 import cl.javadevs.springsecurityjwt.models.Servicio;
 import cl.javadevs.springsecurityjwt.services.ServicioService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationPid;
 import org.springframework.http.HttpStatus;
@@ -19,12 +20,9 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/servicio/")
+@RequiredArgsConstructor
 public class RestControllerServicio {
     private ServicioService servicioService;
-    @Autowired
-    public RestControllerServicio(ServicioService servicioService) {
-        this.servicioService = servicioService;
-    }
 
     //Petición para crear un  servicio
     @PostMapping(value = "crear", headers = "Accept=application/json")

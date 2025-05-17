@@ -29,6 +29,6 @@ public class HorarioBarberoInstancia {
     @Column(nullable = false)
     private DiaSemana dia;
     @Column(nullable = false)
-    private LocalDate fechaInicio;
+    private LocalDate fecha;
     private Integer est_id;
 }

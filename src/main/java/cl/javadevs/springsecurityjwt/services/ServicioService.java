@@ -9,6 +9,7 @@ import cl.javadevs.springsecurityjwt.models.TipoServicio;
 import cl.javadevs.springsecurityjwt.repositories.IServicioRepository;
 import cl.javadevs.springsecurityjwt.repositories.ITipoServicioRepository;
 import cl.javadevs.springsecurityjwt.util.MensajeError;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ServicioService {
     private IServicioRepository servicioRepo;
     private ITipoServicioRepository tipoServicioRepository;
-    @Autowired
-    public ServicioService(IServicioRepository servicioRepo, ITipoServicioRepository tipoServicioRepository) {
-        this.servicioRepo = servicioRepo;
-        this.tipoServicioRepository = tipoServicioRepository;
-    }
-
 
     public void crear(DtoServicio dtoServicio) {
         Servicio servicio = new Servicio();

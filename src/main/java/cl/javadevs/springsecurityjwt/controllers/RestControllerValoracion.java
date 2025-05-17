@@ -6,6 +6,7 @@ import cl.javadevs.springsecurityjwt.dtos.valoracion.response.DtoValoracionRespo
 import cl.javadevs.springsecurityjwt.models.Valoracion;
 import cl.javadevs.springsecurityjwt.services.ValoracionService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/valoracion/")
+@RequiredArgsConstructor
 public class RestControllerValoracion {
-
     private ValoracionService valoracionService;
-    @Autowired
-    public RestControllerValoracion(ValoracionService valoracionService) {
-        this.valoracionService = valoracionService;
-    }
 
     @PostMapping(value = "crear", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<Object>> crearValoracion(@RequestBody @Valid DtoValoracion dtoValoracion, Authentication authentication) {

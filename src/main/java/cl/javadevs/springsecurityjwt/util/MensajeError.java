@@ -8,13 +8,14 @@ public class MensajeError {
     public static final String CORREO_NO_ENVIADO = "No se logró enviar el correo.";
     public static final String CORREO_NO_COINCIDE = "El correo ingresado no coincide con el usuario.";
     public static final String CORREO_EXISTENTE = "El correo electrónico ya está registrado.";
-    public static final String PASSWORDS_NO_COINCIDEN = "Las contraseñas no coinciden";
-    public static final String TOKEN_INVALIDO = "El token proporcionado no es válido";
-    public static final String TOKEN_EXPIRADO = "El token está expirado";
-    public static final String TOKEN_VACIO = "El token no puede estar vacio";
+    public static final String PASSWORDS_NO_COINCIDEN = "Las contraseñas no coinciden.";
+    public static final String TOKEN_INVALIDO = "El token proporcionado no es válido.";
+    public static final String TOKEN_EXPIRADO = "El token está expirado.";
+    public static final String TOKEN_VACIO = "El token no puede estar vacio.";
     public static final String CORREO_RECIENTE = "Ya se ha solicitado un token recientemente. Intenta nuevamente más tarde.";
-    public static final String SERVICIO_NO_ENCONTRADO = "Servicio solicitado no encontrado";
-    public static final String TIPO_SERVICIO_NO_ENCONTRADO = "Tipo de Servicio solicitado no encontrado";
-    public static final String BARBERO_NO_ENCONTRADO = "Barbero no encontrado";
+    public static final String SERVICIO_NO_ENCONTRADO = "Servicio solicitado no encontrado.";
+    public static final String TIPO_SERVICIO_NO_ENCONTRADO = "Tipo de Servicio solicitado no encontrado.";
+    public static final String BARBERO_NO_ENCONTRADO = "Barbero no encontrado.";
+    public static final String TIPO_HORARIO_NO_ENCOTRADO = "Tipo de horarioInstancia con id = %s no ha sido encontrado.";
 
 }

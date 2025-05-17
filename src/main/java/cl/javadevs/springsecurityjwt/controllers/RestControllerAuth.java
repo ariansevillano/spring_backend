@@ -9,6 +9,7 @@ import cl.javadevs.springsecurityjwt.dtos.auth.request.DtoResetPassword;
 import cl.javadevs.springsecurityjwt.models.Usuario;
 import cl.javadevs.springsecurityjwt.services.AuthService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +23,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth/")
+@RequiredArgsConstructor
 public class RestControllerAuth {
 
     private AuthService authService;
-
-    @Autowired
-
-    public RestControllerAuth(AuthService authService) {
-        this.authService = authService;
-    }
 
     //endpoint mejorado para crear un usuario tipo USER
     @PostMapping("register")

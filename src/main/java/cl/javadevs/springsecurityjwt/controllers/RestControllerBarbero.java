@@ -48,19 +48,34 @@ public class RestControllerBarbero {
     }
 
     @GetMapping(value = "listarId/{id}", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<DtoBarberoResponse>> obtenerBarberoPorId(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<DtoBarberoResponse>> obtenerBarberoPorId(@PathVariable Long id,Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
         DtoBarberoResponse dtoBarberoResponse = barberoService.readOne(id);
         return ResponseEntity.ok(ApiResponse.succes("Barbero no encontrado",dtoBarberoResponse));
     }
 
     @PutMapping(value = "actualizar/{id}", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> actualizarBarbero(@PathVariable Long id,@RequestBody @Valid DtoBarbero dtoBarbero) {
+    public ResponseEntity<ApiResponse<Object>> actualizarBarbero(@PathVariable Long id,@RequestBody @Valid DtoBarbero dtoBarbero,Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
         barberoService.update(id,dtoBarbero);
         return ResponseEntity.ok(ApiResponse.succes("Barbero Actualizado exitosamente",dtoBarbero));
     }
 
     @DeleteMapping(value = "eliminar/{id}", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> eliminarBarbero(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Object>> eliminarBarbero(@PathVariable Long id,Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
         barberoService.deshabilitar(id);
         return ResponseEntity.ok(ApiResponse.succes("Barbero Deshabilitado exitosamente",null));
     }

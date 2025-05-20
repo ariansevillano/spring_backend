@@ -53,21 +53,36 @@ public class RestControllerServicio {
 
     //Petición para obtener servicio mediante "ID"
     @GetMapping(value = "listarId/{id}", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<DtoServicioResponse>> obtenerServicioPorId(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<DtoServicioResponse>> obtenerServicioPorId(@PathVariable Long id,Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
         DtoServicioResponse dtoServicio = servicioService.readOne(id);
         return ResponseEntity.ok(ApiResponse.succes("Servicio no encontrado",dtoServicio));
     }
 
     //Petición para actualizar un servicio
     @PutMapping(value = "actualizar/{id}", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> actualizarServicio(@PathVariable Long id ,@RequestBody DtoServicio dtoServicio) {
+    public ResponseEntity<ApiResponse<Object>> actualizarServicio(@PathVariable Long id ,@RequestBody DtoServicio dtoServicio,Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
         servicioService.update(id,dtoServicio);
         return ResponseEntity.ok(ApiResponse.succes("Servicio Actualizado exitosamente",dtoServicio));
     }
 
     //Petición para eliminar un servicio por "Id"
     @DeleteMapping(value = "eliminar/{id}", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> eliminarServicio(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Object>> eliminarServicio(@PathVariable Long id,Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
         servicioService.delete(id);
         return ResponseEntity.ok(ApiResponse.succes("Servicio Eliminado exitosamente",null));
     }

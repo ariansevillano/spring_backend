@@ -12,4 +12,5 @@ public class DtoServicioResponse {
     private Long precio;
     private String descripcion;
     private String nombre_tipoServicio;
+    private String urlServicio;
 }

@@ -4,15 +4,19 @@ package cl.javadevs.springsecurityjwt.controllers;
 import cl.javadevs.springsecurityjwt.dtos.barbero.request.DtoBarbero;
 import cl.javadevs.springsecurityjwt.dtos.barbero.response.DtoBarberoResponse;
 import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
+import cl.javadevs.springsecurityjwt.exceptions.ImagenNoSubidaException;
 import cl.javadevs.springsecurityjwt.models.Barbero;
 import cl.javadevs.springsecurityjwt.services.BarberoService;
+import cl.javadevs.springsecurityjwt.util.MensajeError;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,6 +26,26 @@ import java.util.List;
 public class RestControllerBarbero {
     private final BarberoService barberoService;
 
+    @PostMapping(value = "crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<Object>> crearBarbero(@RequestPart("dtoBarbero") @Valid DtoBarbero dtoBarbero,
+                                                            @RequestParam("imagen")MultipartFile imagen,
+                                                            Authentication authentication) {
+        if (imagen.getContentType() == null || !imagen.getContentType().startsWith("image/")) {
+            throw new ImagenNoSubidaException(MensajeError.TIPO_ARCHIVO_NO_PERMITIDO);
+        }
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
+        barberoService.crear(dtoBarbero,imagen);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                ApiResponse.succes("Barbero creado correctamente", null)
+        );
+    }
+
+
+    /*
     @PostMapping(value = "crear", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<Object>> crearBarbero(@RequestBody @Valid DtoBarbero dtoBarbero, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -34,7 +58,7 @@ public class RestControllerBarbero {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponse.succes("Barbero creado correctamente", null)
         );
-    }
+    }*/
 
     @GetMapping(value = "listar", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<List<DtoBarberoResponse>>> listarBarbero(Authentication authentication) {

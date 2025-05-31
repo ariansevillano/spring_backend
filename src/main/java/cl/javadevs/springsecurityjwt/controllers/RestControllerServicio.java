@@ -3,9 +3,11 @@ package cl.javadevs.springsecurityjwt.controllers;
 import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
 import cl.javadevs.springsecurityjwt.dtos.servicio.request.DtoServicio;
 import cl.javadevs.springsecurityjwt.dtos.servicio.response.DtoServicioResponse;
+import cl.javadevs.springsecurityjwt.exceptions.ImagenNoSubidaException;
 import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
 import cl.javadevs.springsecurityjwt.models.Servicio;
 import cl.javadevs.springsecurityjwt.services.ServicioService;
+import cl.javadevs.springsecurityjwt.util.MensajeError;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,13 +30,18 @@ public class RestControllerServicio {
 
     //Petición para crear un  servicio
     @PostMapping(value = "crear", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> crearServicio(@RequestBody @Valid DtoServicio dtoServicio, Authentication authentication) {
+    public ResponseEntity<ApiResponse<Object>> crearServicio(@RequestPart("dtoServicio") @Valid DtoServicio dtoServicio,
+                                @RequestPart("imagen") MultipartFile imagen
+                                , Authentication authentication) {
+        if (imagen.getContentType() == null || !imagen.getContentType().startsWith("image/")) {
+            throw new ImagenNoSubidaException(MensajeError.TIPO_ARCHIVO_NO_PERMITIDO);
+        }
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
             );
         }
-        servicioService.crear(dtoServicio);
+        servicioService.crear(dtoServicio,imagen);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponse.succes("Servicio creado correctamente", null)
         );

@@ -19,4 +19,6 @@ public class Barbero {
     private String nombre;
     @Column(nullable = false)
     private Integer estado;
+    @Column(nullable = true)
+    private String urlBarbero;
 }

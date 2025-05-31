@@ -30,4 +30,6 @@ public class Servicio {
     @JoinColumn(name = "tipoServicio_id",nullable = false)
     @NotNull(message = "El campo tipoServicio no puede estar vacío")
     private TipoServicio tipoServicio;
+    @Column(nullable = true)
+    private String urlServicio;
 }

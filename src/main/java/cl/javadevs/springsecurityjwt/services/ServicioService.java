@@ -1,5 +1,6 @@
 package cl.javadevs.springsecurityjwt.services;
 
+import cl.javadevs.springsecurityjwt.cloudinaryImages.service.CloudinaryService;
 import cl.javadevs.springsecurityjwt.dtos.servicio.request.DtoServicio;
 import cl.javadevs.springsecurityjwt.dtos.servicio.response.DtoServicioResponse;
 import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
@@ -12,6 +13,7 @@ import cl.javadevs.springsecurityjwt.util.MensajeError;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +23,24 @@ import java.util.Optional;
 public class ServicioService {
     private final IServicioRepository servicioRepo;
     private final ITipoServicioRepository tipoServicioRepository;
+    private final CloudinaryService cloudinaryService;
 
+    public void crear(DtoServicio dtoServicio, MultipartFile imagen) {
+        String urlImagen = cloudinaryService.subirImagen(imagen,"servicios");
+
+        Servicio servicio = new Servicio();
+        servicio.setNombre(dtoServicio.getNombre());
+        servicio.setPrecio(dtoServicio.getPrecio());
+        servicio.setDescripcion(dtoServicio.getDescripcion());
+        TipoServicio tipoServicio = tipoServicioRepository.findById(dtoServicio.getTipoServicio_id())
+                .orElseThrow(() -> new ServicioNoEncontradoException(MensajeError.TIPO_SERVICIO_NO_ENCONTRADO));
+        servicio.setTipoServicio(tipoServicio);
+        servicio.setUrlServicio(urlImagen);
+        servicioRepo.save(servicio);
+    }
+
+
+    /*
     public void crear(DtoServicio dtoServicio) {
         Servicio servicio = new Servicio();
         servicio.setNombre(dtoServicio.getNombre());
@@ -31,7 +50,7 @@ public class ServicioService {
                 .orElseThrow(() -> new ServicioNoEncontradoException(MensajeError.TIPO_SERVICIO_NO_ENCONTRADO));
         servicio.setTipoServicio(tipoServicio);
         servicioRepo.save(servicio);
-    }
+    }*/
 
     public List<DtoServicioResponse> readAll() {
         List<Servicio> servicios = servicioRepo.findAll();
@@ -42,6 +61,7 @@ public class ServicioService {
             dto.setPrecio(servicio.getPrecio());
             dto.setDescripcion(servicio.getDescripcion());
             dto.setNombre_tipoServicio(servicio.getTipoServicio().getNombre());
+            dto.setUrlServicio(servicio.getUrlServicio());
             return dto;
         }).toList();
     }

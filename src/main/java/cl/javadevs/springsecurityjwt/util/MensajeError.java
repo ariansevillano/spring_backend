@@ -17,5 +17,6 @@ public class MensajeError {
     public static final String TIPO_SERVICIO_NO_ENCONTRADO = "Tipo de Servicio solicitado no encontrado.";
     public static final String BARBERO_NO_ENCONTRADO = "Barbero no encontrado.";
     public static final String TIPO_HORARIO_NO_ENCOTRADO = "Tipo de horarioInstancia con id = %s no ha sido encontrado.";
-
+    public static final String CLOUDINARY_ERROR = "La imagen no se logró subir a Cloudinary";
+    public static final String TIPO_ARCHIVO_NO_PERMITIDO = "Solo se permiten archivos de imagen.";
 }

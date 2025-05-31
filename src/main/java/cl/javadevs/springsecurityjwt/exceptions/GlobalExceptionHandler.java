@@ -113,4 +113,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ImagenNoSubidaException.class)
+    public ResponseEntity<ApiResponse<Object>> handleImagenNoSubidaException(ImagenNoSubidaException ex){
+        ApiResponse<Object> response = new ApiResponse<>(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                ex.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

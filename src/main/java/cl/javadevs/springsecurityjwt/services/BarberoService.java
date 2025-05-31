@@ -1,5 +1,6 @@
 package cl.javadevs.springsecurityjwt.services;
 
+import cl.javadevs.springsecurityjwt.cloudinaryImages.service.CloudinaryService;
 import cl.javadevs.springsecurityjwt.dtos.barbero.request.DtoBarbero;
 import cl.javadevs.springsecurityjwt.dtos.barbero.response.DtoBarberoResponse;
 import cl.javadevs.springsecurityjwt.dtos.servicio.response.DtoServicioResponse;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,26 +25,40 @@ public class BarberoService {
     private final IBarberoRepository barberoRepository;
     private final AuthenticationManager authenticationManager;
     private final HorarioBarberoBaseService horarioBarberoBaseService;
+    private final CloudinaryService cloudinaryService;
 
-    public void crear(DtoBarbero dtoBarbero){
+    public void crear(DtoBarbero dtoBarbero, MultipartFile imagen){
+        String urlImagen = cloudinaryService.subirImagen(imagen,"barberos");
+
+        Barbero barbero = new Barbero();
+        barbero.setNombre(dtoBarbero.getNombre());
+        barbero.setEstado(1);
+        barbero.setUrlBarbero(urlImagen);
+        barberoRepository.save(barbero);
+        horarioBarberoBaseService.crearHorarioBaseInicial(barbero.getBarbero_id());
+    }
+
+    /*public void crear(DtoBarbero dtoBarbero){
         Barbero barbero = new Barbero();
         barbero.setNombre(dtoBarbero.getNombre());
         barbero.setEstado(1);
         barberoRepository.save(barbero);
         horarioBarberoBaseService.crearHorarioBaseInicial(barbero.getBarbero_id());
-    }
+    }*/
 
     public List<DtoBarberoResponse> readAll(){
         List<Barbero> barberos = barberoRepository.findAll();
         return barberos.stream().filter(barbero ->
-                barbero.getEstado() == 1)
+                        barbero.getEstado() == 1)
                 .map(barbero -> {
                     DtoBarberoResponse dto = new DtoBarberoResponse();
                     dto.setBarbero_id(barbero.getBarbero_id());
                     dto.setNombre(barbero.getNombre());
+                    dto.setUrlBarbero(barbero.getUrlBarbero());
                     return dto;
                 }).toList();
-        }
+    }
+
 
     public void deshabilitar(Long id) {
         Barbero barbero = barberoRepository.findById(id)

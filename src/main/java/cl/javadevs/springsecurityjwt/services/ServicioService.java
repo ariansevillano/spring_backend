@@ -32,6 +32,7 @@ public class ServicioService {
         servicio.setNombre(dtoServicio.getNombre());
         servicio.setPrecio(dtoServicio.getPrecio());
         servicio.setDescripcion(dtoServicio.getDescripcion());
+        servicio.setEstado(1);
         TipoServicio tipoServicio = tipoServicioRepository.findById(dtoServicio.getTipoServicio_id())
                 .orElseThrow(() -> new ServicioNoEncontradoException(MensajeError.TIPO_SERVICIO_NO_ENCONTRADO));
         servicio.setTipoServicio(tipoServicio);
@@ -54,15 +55,17 @@ public class ServicioService {
 
     public List<DtoServicioResponse> readAll() {
         List<Servicio> servicios = servicioRepo.findAll();
-        return servicios.stream().map(servicio -> {
-            DtoServicioResponse dto = new DtoServicioResponse();
-            dto.setServicio_id(servicio.getServicio_id());
-            dto.setNombre(servicio.getNombre());
-            dto.setPrecio(servicio.getPrecio());
-            dto.setDescripcion(servicio.getDescripcion());
-            dto.setNombre_tipoServicio(servicio.getTipoServicio().getNombre());
-            dto.setUrlServicio(servicio.getUrlServicio());
-            return dto;
+        return servicios.stream().filter(servicio ->
+                servicio.getEstado() == 1)
+                .map(servicio -> {
+                    DtoServicioResponse dto = new DtoServicioResponse();
+                    dto.setServicio_id(servicio.getServicio_id());
+                    dto.setNombre(servicio.getNombre());
+                    dto.setPrecio(servicio.getPrecio());
+                    dto.setDescripcion(servicio.getDescripcion());
+                    dto.setNombre_tipoServicio(servicio.getTipoServicio().getNombre());
+                    dto.setUrlServicio(servicio.getUrlServicio());
+                    return dto;
         }).toList();
     }
 
@@ -72,14 +75,23 @@ public class ServicioService {
         DtoServicioResponse dto = new DtoServicioResponse();
         dto.setServicio_id(servicio.getServicio_id());
         dto.setNombre(servicio.getNombre());
+        dto.setPrecio(servicio.getPrecio());
         dto.setDescripcion(servicio.getDescripcion());
         dto.setNombre_tipoServicio(servicio.getTipoServicio().getNombre());
+        dto.setUrlServicio(servicio.getUrlServicio());
         return dto;
     }
 
-    public void update(Long id, DtoServicio dtoServicio) {
+    public void update(Long id, DtoServicio dtoServicio, MultipartFile imagen) {
+        String urlImagen = null;
+
         Servicio servicio = servicioRepo.findById(id)
                         .orElseThrow(()-> new ServicioNoEncontradoException(MensajeError.SERVICIO_NO_ENCONTRADO));
+
+        if (imagen != null){
+            urlImagen = cloudinaryService.subirImagen(imagen,"servicios");
+            servicio.setUrlServicio(urlImagen);
+        }
         servicio.setNombre(dtoServicio.getNombre());
         servicio.setPrecio(dtoServicio.getPrecio());
         servicio.setDescripcion(dtoServicio.getDescripcion());
@@ -89,10 +101,10 @@ public class ServicioService {
         servicioRepo.save(servicio);
     }
 
-    public void delete(Long id) {
-        if (!servicioRepo.existsById(id)) {
-            throw new ServicioNoEncontradoException("No se puede eliminar. Servicio no encontrado con Id: " + id);
-        }
-        servicioRepo.deleteById(id);
+    public void deshabilitar(Long id) {
+        Servicio servicio = servicioRepo.findById(id)
+                .orElseThrow(() -> new ServicioNoEncontradoException("No se puede eliminar. Servicio no encontrado con Id: " + id));
+        servicio.setEstado(0);
+        servicioRepo.save(servicio);
     }
 }

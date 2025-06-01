@@ -28,9 +28,11 @@ public class RestControllerBarbero {
 
     @PostMapping(value = "crear", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<Object>> crearBarbero(@RequestPart("dtoBarbero") @Valid DtoBarbero dtoBarbero,
-                                                            @RequestParam("imagen")MultipartFile imagen,
+                                                            @RequestPart(value="imagen",required = false) MultipartFile imagen,
                                                             Authentication authentication) {
-        if (imagen.getContentType() == null || !imagen.getContentType().startsWith("image/")) {
+        if (imagen != null &&
+                (imagen.getContentType() == null
+                        || !imagen.getContentType().startsWith("image/"))) {
             throw new ImagenNoSubidaException(MensajeError.TIPO_ARCHIVO_NO_PERMITIDO);
         }
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -83,14 +85,22 @@ public class RestControllerBarbero {
     }
 
     @PutMapping(value = "actualizar/{id}", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> actualizarBarbero(@PathVariable Long id,@RequestBody @Valid DtoBarbero dtoBarbero,Authentication authentication) {
+    public ResponseEntity<ApiResponse<Object>> actualizarBarbero(@PathVariable Long id,@RequestPart @Valid DtoBarbero dtoBarbero,
+                                                                 @RequestPart (value = "imagen", required = false) MultipartFile imagen,
+                                                                 Authentication authentication) {
+        if (imagen != null &&
+                (imagen.getContentType() == null
+                        || !imagen.getContentType().startsWith("image/"))) {
+            throw new ImagenNoSubidaException(MensajeError.TIPO_ARCHIVO_NO_PERMITIDO);
+        }
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
             );
         }
-        barberoService.update(id,dtoBarbero);
-        return ResponseEntity.ok(ApiResponse.succes("Barbero Actualizado exitosamente",dtoBarbero));
+        barberoService.update(id,dtoBarbero,imagen);
+        DtoBarberoResponse dtoResponse = barberoService.readOne(id);
+        return ResponseEntity.ok(ApiResponse.succes("Barbero Actualizado exitosamente",dtoResponse));
     }
 
     @DeleteMapping(value = "eliminar/{id}", headers = "Accept=application/json")

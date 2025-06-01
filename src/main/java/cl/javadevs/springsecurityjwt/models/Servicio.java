@@ -32,4 +32,6 @@ public class Servicio {
     private TipoServicio tipoServicio;
     @Column(nullable = true)
     private String urlServicio;
+    @Column(nullable = false)
+    private Integer estado;
 }

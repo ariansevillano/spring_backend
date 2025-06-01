@@ -1,5 +1,6 @@
 package cl.javadevs.springsecurityjwt.controllers;
 
+import cl.javadevs.springsecurityjwt.dtos.barbero.response.DtoBarberoResponse;
 import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
 import cl.javadevs.springsecurityjwt.dtos.servicio.request.DtoServicio;
 import cl.javadevs.springsecurityjwt.dtos.servicio.response.DtoServicioResponse;
@@ -73,14 +74,23 @@ public class RestControllerServicio {
 
     //Petición para actualizar un servicio
     @PutMapping(value = "actualizar/{id}", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> actualizarServicio(@PathVariable Long id ,@RequestBody DtoServicio dtoServicio,Authentication authentication) {
+    public ResponseEntity<ApiResponse<Object>> actualizarServicio(@PathVariable Long id ,@RequestPart DtoServicio dtoServicio,
+                                                                  @RequestPart(value = "imagen", required = false) MultipartFile imagen,
+                                                                  Authentication authentication) {
+        if (imagen != null &&
+                (imagen.getContentType() == null
+                        || !imagen.getContentType().startsWith("image/"))) {
+            throw new ImagenNoSubidaException(MensajeError.TIPO_ARCHIVO_NO_PERMITIDO);
+        }
+
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
             );
         }
-        servicioService.update(id,dtoServicio);
-        return ResponseEntity.ok(ApiResponse.succes("Servicio Actualizado exitosamente",dtoServicio));
+        servicioService.update(id,dtoServicio,imagen);
+        DtoServicioResponse dtoServicioResponse = servicioService.readOne(id);
+        return ResponseEntity.ok(ApiResponse.succes("Servicio Actualizado exitosamente",dtoServicioResponse));
     }
 
     //Petición para eliminar un servicio por "Id"
@@ -91,7 +101,7 @@ public class RestControllerServicio {
                     ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
             );
         }
-        servicioService.delete(id);
+        servicioService.deshabilitar(id);
         return ResponseEntity.ok(ApiResponse.succes("Servicio Eliminado exitosamente",null));
     }
 }

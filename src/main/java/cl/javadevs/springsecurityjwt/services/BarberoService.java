@@ -27,13 +27,18 @@ public class BarberoService {
     private final HorarioBarberoBaseService horarioBarberoBaseService;
     private final CloudinaryService cloudinaryService;
 
-    public void crear(DtoBarbero dtoBarbero, MultipartFile imagen){
-        String urlImagen = cloudinaryService.subirImagen(imagen,"barberos");
+    public void crear(DtoBarbero dtoBarbero, MultipartFile imagen) {
+        String urlImagen = null;
 
+        if (imagen != null) {
+            urlImagen = cloudinaryService.subirImagen(imagen, "barberos");
+        }
         Barbero barbero = new Barbero();
         barbero.setNombre(dtoBarbero.getNombre());
         barbero.setEstado(1);
-        barbero.setUrlBarbero(urlImagen);
+        if (urlImagen != null) {
+            barbero.setUrlBarbero(urlImagen);
+        }
         barberoRepository.save(barbero);
         horarioBarberoBaseService.crearHorarioBaseInicial(barbero.getBarbero_id());
     }
@@ -68,11 +73,19 @@ public class BarberoService {
     }
 
 
-    public void update(Long id,DtoBarbero dtoBarbero){
+    public void update(Long id,DtoBarbero dtoBarbero,MultipartFile imagen){
         Barbero barbero = barberoRepository.findById(id)
                 .orElseThrow(() -> new BarberoNoEncontradoException("Barbero no encontrada con id: " + id));
+
+        String urlImagen = null;
+
+        if (imagen != null) {
+            urlImagen = cloudinaryService.subirImagen(imagen, "barberos");
+            barbero.setUrlBarbero(urlImagen);
+        }
         barbero.setNombre(dtoBarbero.getNombre());
-        barberoRepository.save(barbero);}
+        barberoRepository.save(barbero);
+    }
 
     public DtoBarberoResponse readOne(Long id){
         Barbero barbero = barberoRepository.findById(id)
@@ -80,6 +93,7 @@ public class BarberoService {
         DtoBarberoResponse dto = new DtoBarberoResponse();
         dto.setBarbero_id(barbero.getBarbero_id());
         dto.setNombre(barbero.getNombre());
+        dto.setUrlBarbero(barbero.getUrlBarbero());
         return dto;
     }
 }

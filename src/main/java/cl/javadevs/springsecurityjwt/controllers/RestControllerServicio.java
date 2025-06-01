@@ -68,7 +68,7 @@ public class RestControllerServicio {
             );
         }
         DtoServicioResponse dtoServicio = servicioService.readOne(id);
-        return ResponseEntity.ok(ApiResponse.succes("Servicio no encontrado",dtoServicio));
+        return ResponseEntity.ok(ApiResponse.succes("Servicio encontrado",dtoServicio));
     }
 
     //Petición para actualizar un servicio

@@ -82,6 +82,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT,"/api/horarioBarberoBase/actualizarTurnosDia").hasAnyAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT,"/api/horarioBarberoBase/confirmarHorario").hasAnyAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/api/horarioInstancia/actual").hasAnyAuthority("ADMIN","USER")
+                .requestMatchers(HttpMethod.GET,"/api/rango/listar").hasAnyAuthority("ADMIN" , "USER")
+                .requestMatchers(HttpMethod.GET,"/api/rango/listarId/**").hasAnyAuthority("ADMIN" , "USER")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

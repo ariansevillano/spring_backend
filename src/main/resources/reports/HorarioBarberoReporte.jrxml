@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="HorarioBarberoReporte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="12345678-90ab-cdef-1234-567890abcdef">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="JasperConnection_Barbershop"/>
+    <parameter name="FechaInicio" class="java.sql.Date">
+        <defaultValueExpression><![CDATA[new java.sql.Date(System.currentTimeMillis())]]></defaultValueExpression>
+    </parameter>
+    <parameter name="FechaFin" class="java.sql.Date">
+        <defaultValueExpression><![CDATA[new java.sql.Date(System.currentTimeMillis())]]></defaultValueExpression>
+    </parameter>
+    <queryString>
+        <![CDATA[SELECT
+                hbi.dia,
+                th.nombre AS turno,
+                GROUP_CONCAT(b.nombre SEPARATOR '\n') AS barberos,
+                hbi.fecha
+            FROM
+                horario_barbero_instancias hbi
+            JOIN
+                barberos b ON hbi.barbero_id = b.barbero_id
+            JOIN
+                tipo_horarios th ON hbi.tipo_horario_id = th.tipo_horario_id
+            WHERE
+                hbi.fecha BETWEEN $P{FechaInicio} AND $P{FechaFin}
+            GROUP BY
+                hbi.fecha, hbi.dia, th.nombre
+            ORDER BY
+                hbi.fecha, th.nombre;]]>
+    </queryString>
+    <field name="dia" class="java.lang.String"/>
+    <field name="turno" class="java.lang.String"/>
+    <field name="barberos" class="java.lang.String"/>
+    <field name="fecha" class="java.sql.Date"/>
+    <title>
+        <band height="50">
+            <textField>
+                <reportElement x="0" y="-10" width="555" height="60" uuid="c16d0ff6-da9b-486b-ab6f-6d63cedafc96"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Arial Black" size="16" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Reporte de Horarios Semanales desde "+$P{FechaInicio}+" hasta "+$P{FechaFin}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="30">
+            <staticText>
+                <reportElement mode="Opaque" x="40" y="0" width="100" height="30" backcolor="#A0C0E8" uuid="8dfe9f63-aa94-4560-a1f4-00aefbdf76fa"/>
+                <box topPadding="5" leftPadding="8" bottomPadding="5">
+                    <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial Black"/>
+                </textElement>
+                <text><![CDATA[Dia]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="140" y="0" width="100" height="30" backcolor="#A0C0E8" uuid="6bff0373-22d6-4c6f-bf55-4fd518059e38"/>
+                <box topPadding="5" leftPadding="8" bottomPadding="5">
+                    <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial Black"/>
+                </textElement>
+                <text><![CDATA[Turno]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="240" y="0" width="255" height="30" backcolor="#A0C0E8" uuid="e0353b74-084c-403b-b491-aa32c6dfe3fe"/>
+                <box topPadding="5" leftPadding="8" bottomPadding="5">
+                    <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="Arial Black"/>
+                </textElement>
+                <text><![CDATA[Barberos]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="30">
+            <textField>
+                <reportElement stretchType="RelativeToTallestObject" x="40" y="0" width="100" height="30" uuid="7ba7c459-0d58-41d4-b72e-85f714607e8f"/>
+                <box topPadding="5" leftPadding="8" bottomPadding="5">
+                    <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{dia}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement stretchType="RelativeToTallestObject" x="140" y="0" width="100" height="30" uuid="76ec7e60-9471-4625-8769-0d02521c889d"/>
+                <box topPadding="5" leftPadding="8" bottomPadding="5">
+                    <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{turno}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="240" y="0" width="255" height="30" isPrintWhenDetailOverflows="true" backcolor="#FDFFD9" uuid="21ea3756-29f6-439d-80de-f739d76d9913"/>
+                <box topPadding="5" leftPadding="8" bottomPadding="5">
+                    <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                </box>
+                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{barberos}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+</jasperReport>

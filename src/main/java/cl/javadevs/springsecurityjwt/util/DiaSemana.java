@@ -3,9 +3,9 @@ package cl.javadevs.springsecurityjwt.util;
 public enum DiaSemana {
     LUNES,
     MARTES,
-    MIERCOLES,
+    MIÉRCOLES,
     JUEVES,
     VIERNES,
-    SABADO,
+    SÁBADO,
     DOMINGO
 }

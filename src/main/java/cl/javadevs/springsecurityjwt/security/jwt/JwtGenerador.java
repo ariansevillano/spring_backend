@@ -1,5 +1,6 @@
 package cl.javadevs.springsecurityjwt.security.jwt;
 
+import cl.javadevs.springsecurityjwt.security.service.CustomUserDetails;
 import cl.javadevs.springsecurityjwt.security.service.CustomUsersDetailsService;
 import cl.javadevs.springsecurityjwt.security.util.ConstantesSeguridad;
 import io.jsonwebtoken.Claims;
@@ -46,18 +47,19 @@ public class JwtGenerador {
     }*/
 
 
-    private String generarTokenDesdeCustomUserDetails(CustomUsersDetailsService.CustomUserDetails userDetails,Authentication authentication){
+    private String generarTokenDesdeCustomUserDetails(CustomUserDetails userDetails, Authentication authentication){
         String username = userDetails.getUsername();
         String nombre = userDetails.getNombre();
         String apellido = userDetails.getApellido();
         String rol = obtenerRol(authentication);
-        return construirToken(username,nombre,apellido,rol);
+        String urlUsuario = userDetails.getUrlUsuario();
+        return construirToken(username,nombre,apellido,rol,urlUsuario);
 
     }
 
     private String generarTokenDesdeUsername(String username,Authentication authentication){
         String rol = obtenerRol(authentication);
-        return construirToken(username,null,null,rol);
+        return construirToken(username,null,null,rol,null);
     }
 
     private String obtenerRol(Authentication authentication){
@@ -67,7 +69,7 @@ public class JwtGenerador {
                 .orElse("UNKNOWN");
     }
 
-    private String construirToken(String username, String nombre, String apellido, String rol){
+    private String construirToken(String username, String nombre, String apellido, String rol, String urlUsuario){
         Date tiempoActual = new Date();
         Date expiracionToken = new Date(tiempoActual.getTime() + ConstantesSeguridad.JWT_EXPIRATION_TOKEN);
 
@@ -76,6 +78,7 @@ public class JwtGenerador {
                 .claim("nombre",nombre)
                 .claim("apellido",apellido)
                 .claim("rol",rol)
+                .claim("urlUsuario", urlUsuario)
                 .setIssuedAt(tiempoActual)
                 .setExpiration(expiracionToken)
                 .signWith(SignatureAlgorithm.HS512, ConstantesSeguridad.JWT_FIRMA)
@@ -83,7 +86,7 @@ public class JwtGenerador {
     }
 
     public String generarToken(Authentication authentication) {
-        if (authentication.getPrincipal() instanceof CustomUsersDetailsService.CustomUserDetails userDetails) {
+        if (authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
             return generarTokenDesdeCustomUserDetails(userDetails, authentication);
         } else if (authentication.getPrincipal() instanceof String username) {
             return generarTokenDesdeUsername(username, authentication);

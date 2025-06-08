@@ -1,14 +1,11 @@
-package cl.javadevs.springsecurityjwt.dtos.auth.request;
+package cl.javadevs.springsecurityjwt.dtos.usuario.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class DtoRegistro {
-    @NotBlank(message = "El campo username no puede estar vacío")
-    private String username;
-    @NotBlank(message = "El campo password no puede estar vacío")
-    private String password;
+public class DtoUsuario {
+
     @NotBlank(message = "El campo nombre no puede estar vacío")
     private String nombre;
     @NotBlank(message = "El campo apellido no puede estar vacío")

@@ -46,22 +46,6 @@ public class RestControllerBarbero {
         );
     }
 
-
-    /*
-    @PostMapping(value = "crear", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<Object>> crearBarbero(@RequestBody @Valid DtoBarbero dtoBarbero, Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
-            );
-        }
-
-        barberoService.crear(dtoBarbero);
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                ApiResponse.succes("Barbero creado correctamente", null)
-        );
-    }*/
-
     @GetMapping(value = "listar", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<List<DtoBarberoResponse>>> listarBarbero(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -81,7 +65,7 @@ public class RestControllerBarbero {
             );
         }
         DtoBarberoResponse dtoBarberoResponse = barberoService.readOne(id);
-        return ResponseEntity.ok(ApiResponse.succes("Barbero no encontrado",dtoBarberoResponse));
+        return ResponseEntity.ok(ApiResponse.succes("Barbero encontrado",dtoBarberoResponse));
     }
 
     @PutMapping(value = "actualizar/{id}", headers = "Accept=application/json")

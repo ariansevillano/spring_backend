@@ -85,6 +85,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/api/rango/listar").hasAnyAuthority("ADMIN" , "USER")
                 .requestMatchers(HttpMethod.GET,"/api/rango/listarId/**").hasAnyAuthority("ADMIN" , "USER")
                 .requestMatchers(HttpMethod.GET,"/api/reportes/horario").hasAnyAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/usuario/listar").hasAnyAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/usuario/listarId/**").hasAnyAuthority("ADMIN","USER")
+                .requestMatchers(HttpMethod.PUT,"/api/usuario/actualizar/**").hasAnyAuthority("ADMIN", "USER")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

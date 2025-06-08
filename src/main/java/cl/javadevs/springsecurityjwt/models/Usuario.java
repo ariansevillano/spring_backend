@@ -37,6 +37,10 @@ public class Usuario {
     @Email(message = "El correo electrónico no es válido")
     @NotBlank(message = "El campo email no puede estar vacío")
     private String email;
+    @NotBlank(message = "El campo celular no puede estar vacío")
+    private String celular;
+    @Column(nullable = true)
+    private String urlUsuario;
     private String tokenPassword;
     @Column(name = "last_token_request")
     private LocalDateTime lastTokenRequest;
@@ -44,9 +48,9 @@ public class Usuario {
     private LocalDateTime refreshTokenExpiryDate; //Fecha de expiración del refresh token
     //Usamos fetchType en EAGER para que cada vez que se acceda o se extraiga un usuario de la BD, este se traiga todos sus roles
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    /*Con JoinTable estaremos creando una tabla que unirá la tabla de usuario y role, con lo cual tendremos un total de 3 tablas
+    /*Con JoinTable estaremos creando una tabla que unirá la tabla de usuario y rol, con lo cual tendremos un total de 3 tablas
     relacionadas en la tabla "usuarios_roles", a través de sus columnas usuario_id que apuntara al ID de la tabla usuario
-    y role_id que apuntara al Id de la tabla role */
+    y rol_id que apuntara al Id de la tabla role */
     @JoinTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "usuario_id")
     ,inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "rol_id"))
     private List<Rol> roles = new ArrayList<>();

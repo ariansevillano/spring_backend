@@ -5,7 +5,8 @@ import cl.javadevs.springsecurityjwt.models.Usuario;
 import cl.javadevs.springsecurityjwt.repositories.IUsuariosRepository;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,14 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUsersDetailsService implements UserDetailsService {
-    private IUsuariosRepository usuariosRepo;
-
-    @Autowired
-    public CustomUsersDetailsService(IUsuariosRepository usuariosRepo) {
-        this.usuariosRepo = usuariosRepo;
-    }
-
+    private final IUsuariosRepository usuariosRepo;
 
     //Método para traernos una lista de autoridades por medio de una lista de roles
     public Collection<GrantedAuthority> mapToAuthorities(List<Rol> roles) {
@@ -45,28 +41,9 @@ public class CustomUsersDetailsService implements UserDetailsService {
                 usuario.getEmail(),
                 usuario.getRoles().stream()
                         .map(rol -> new SimpleGrantedAuthority(rol.getName()))
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList()),
+                usuario.getUrlUsuario());
     }
 
 
-
-    // Clase interna para representar los detalles del usuario
-    public static class CustomUserDetails extends org.springframework.security.core.userdetails.User {
-        private final String nombre;
-        private final String apellido;
-
-        public CustomUserDetails(String username, String password, String nombre, String apellido, @Email(message = "El correo electrónico no es válido") @NotBlank(message = "El campo email no puede estar vacío") String email, Collection<? extends GrantedAuthority> authorities) {
-            super(username, password, authorities);
-            this.nombre = nombre;
-            this.apellido = apellido;
-        }
-
-        public String getNombre() {
-            return nombre;
-        }
-
-        public String getApellido() {
-            return apellido;
-        }
-    }
 }

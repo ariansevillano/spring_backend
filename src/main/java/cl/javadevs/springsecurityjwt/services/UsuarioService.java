@@ -55,7 +55,7 @@ public class UsuarioService {
                 .orElseThrow(()-> new UsuarioExistenteException(MensajeError.USUARIO_NO_EXISTENTE));
 
         if (imagen != null){
-            urlImagen = cloudinaryService.subirImagen(imagen,"servicios");
+            urlImagen = cloudinaryService.subirImagen(imagen,"usuarios");
             usuario.setUrlUsuario(urlImagen);
         }
         usuario.setNombre(dtoUsuario.getNombre());

@@ -9,6 +9,7 @@ import cl.javadevs.springsecurityjwt.models.*;
 import cl.javadevs.springsecurityjwt.repositories.IUsuariosRepository;
 import cl.javadevs.springsecurityjwt.util.MensajeError;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,9 +34,27 @@ public class UsuarioService {
         return dto;
     }
 
+    public DtoUsuarioResponse readOneByAuth(Authentication authentication){
+        String name = authentication.getName();
+        Usuario usuario = usuariosRepository.findByUsername(name)
+                .orElseThrow(() -> new UsuarioExistenteException(MensajeError.USUARIO_NO_EXISTENTE));
+        DtoUsuarioResponse dto = new DtoUsuarioResponse();
+        dto.setUsuario_id(usuario.getUsuario_id());
+        dto.setNombre(usuario.getNombre());
+        dto.setApellido(usuario.getApellido());
+        dto.setCelular(usuario.getCelular());
+        dto.setEmail(usuario.getEmail());
+        dto.setUrlUsuario(usuario.getUrlUsuario());
+        dto.setUsername(usuario.getUsername());
+
+        return dto;
+    }
+
     public List<DtoUsuarioResponse> readAll() {
         List<Usuario> usuarios = usuariosRepository.findAll();
-        return usuarios.stream().map(usuario -> {
+        return usuarios.stream().filter(usuario -> usuario.getRoles().
+                        stream().anyMatch(rol -> "USER".equals(rol.getName())))
+                .map(usuario -> {
             DtoUsuarioResponse dto = new DtoUsuarioResponse();
             dto.setUsuario_id(usuario.getUsuario_id());
             dto.setUsername(usuario.getUsername());
@@ -64,5 +83,6 @@ public class UsuarioService {
         usuario.setCelular(dtoUsuario.getCelular());
         usuariosRepository.save(usuario);
     }
+
 
 }

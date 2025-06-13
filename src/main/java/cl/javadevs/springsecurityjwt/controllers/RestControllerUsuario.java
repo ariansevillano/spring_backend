@@ -45,6 +45,17 @@ public class RestControllerUsuario {
         return ResponseEntity.ok(ApiResponse.succes("Usuario encontrado",usuario));
     }
 
+    @GetMapping(value = "listarme", headers = "Accept=application/json")
+    public ResponseEntity<ApiResponse<DtoUsuarioResponse>> obtenerMiUsuario(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
+        DtoUsuarioResponse usuario = usuarioService.readOneByAuth(authentication);
+        return ResponseEntity.ok(ApiResponse.succes("Usuario encontrado",usuario));
+    }
+
     @PutMapping(value = "actualizar/{id}", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<Object>> actualizarUsuario(@PathVariable Long id,@RequestPart @Valid DtoUsuario dtoUsuario,
                                                                  @RequestPart (value = "imagen", required = false) MultipartFile imagen,
@@ -63,4 +74,6 @@ public class RestControllerUsuario {
         DtoUsuarioResponse dtoResponse = usuarioService.readOne(id);
         return ResponseEntity.ok(ApiResponse.succes("Usuario Actualizado exitosamente",dtoResponse));
     }
+
+
 }

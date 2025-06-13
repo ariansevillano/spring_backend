@@ -5,6 +5,7 @@ import cl.javadevs.springsecurityjwt.dtos.usuario.request.DtoUsuario;
 import cl.javadevs.springsecurityjwt.dtos.usuario.response.DtoUsuarioResponse;
 import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
 import cl.javadevs.springsecurityjwt.exceptions.UsuarioExistenteException;
+import cl.javadevs.springsecurityjwt.mappers.UsuarioMapper;
 import cl.javadevs.springsecurityjwt.models.*;
 import cl.javadevs.springsecurityjwt.repositories.IUsuariosRepository;
 import cl.javadevs.springsecurityjwt.util.MensajeError;
@@ -24,13 +25,7 @@ public class UsuarioService {
     public DtoUsuarioResponse readOne(Long id){
         Usuario usuario = usuariosRepository.findById(id)
                 .orElseThrow(() -> new UsuarioExistenteException(MensajeError.USUARIO_NO_EXISTENTE));
-        DtoUsuarioResponse dto = new DtoUsuarioResponse();
-        dto.setUsuario_id(usuario.getUsuario_id());
-        dto.setNombre(usuario.getNombre());
-        dto.setApellido(usuario.getApellido());
-        dto.setEmail(usuario.getEmail());
-        dto.setCelular(usuario.getCelular());
-        dto.setUrlUsuario(usuario.getUrlUsuario());
+        DtoUsuarioResponse dto = UsuarioMapper.toDto(usuario);
         return dto;
     }
 
@@ -38,15 +33,7 @@ public class UsuarioService {
         String name = authentication.getName();
         Usuario usuario = usuariosRepository.findByUsername(name)
                 .orElseThrow(() -> new UsuarioExistenteException(MensajeError.USUARIO_NO_EXISTENTE));
-        DtoUsuarioResponse dto = new DtoUsuarioResponse();
-        dto.setUsuario_id(usuario.getUsuario_id());
-        dto.setNombre(usuario.getNombre());
-        dto.setApellido(usuario.getApellido());
-        dto.setCelular(usuario.getCelular());
-        dto.setEmail(usuario.getEmail());
-        dto.setUrlUsuario(usuario.getUrlUsuario());
-        dto.setUsername(usuario.getUsername());
-
+        DtoUsuarioResponse dto = UsuarioMapper.toDto(usuario);
         return dto;
     }
 
@@ -55,14 +42,7 @@ public class UsuarioService {
         return usuarios.stream().filter(usuario -> usuario.getRoles().
                         stream().anyMatch(rol -> "USER".equals(rol.getName())))
                 .map(usuario -> {
-            DtoUsuarioResponse dto = new DtoUsuarioResponse();
-            dto.setUsuario_id(usuario.getUsuario_id());
-            dto.setUsername(usuario.getUsername());
-            dto.setNombre(usuario.getNombre());
-            dto.setApellido(usuario.getApellido());
-            dto.setEmail(usuario.getEmail());
-            dto.setCelular(usuario.getCelular());
-            dto.setUrlUsuario(usuario.getUrlUsuario());
+            DtoUsuarioResponse dto = UsuarioMapper.toDto(usuario);
             return dto;
         }).toList();
     }
@@ -84,5 +64,20 @@ public class UsuarioService {
         usuariosRepository.save(usuario);
     }
 
+    public void updateByAuth(DtoUsuario dtoUsuario, MultipartFile imagen, Authentication authentication) {
+        String username = authentication.getName();
+        Usuario usuario = usuariosRepository.findByUsername(username)
+                .orElseThrow(() -> new UsuarioExistenteException(MensajeError.USUARIO_NO_EXISTENTE));
+
+        if (imagen != null) {
+            String urlImagen = cloudinaryService.subirImagen(imagen, "usuarios");
+            usuario.setUrlUsuario(urlImagen);
+        }
+        usuario.setNombre(dtoUsuario.getNombre());
+        usuario.setApellido(dtoUsuario.getApellido());
+        usuario.setEmail(dtoUsuario.getEmail());
+        usuario.setCelular(dtoUsuario.getCelular());
+        usuariosRepository.save(usuario);
+    }
 
 }

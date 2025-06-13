@@ -5,6 +5,7 @@ import cl.javadevs.springsecurityjwt.dtos.barbero.request.DtoBarbero;
 import cl.javadevs.springsecurityjwt.dtos.barbero.response.DtoBarberoResponse;
 import cl.javadevs.springsecurityjwt.dtos.servicio.response.DtoServicioResponse;
 import cl.javadevs.springsecurityjwt.exceptions.BarberoNoEncontradoException;
+import cl.javadevs.springsecurityjwt.mappers.BarberoMapper;
 import cl.javadevs.springsecurityjwt.models.Barbero;
 import cl.javadevs.springsecurityjwt.repositories.IBarberoRepository;
 import cl.javadevs.springsecurityjwt.repositories.IHorarioBarberoBaseRepository;
@@ -43,23 +44,12 @@ public class BarberoService {
         horarioBarberoBaseService.crearHorarioBaseInicial(barbero.getBarbero_id());
     }
 
-    /*public void crear(DtoBarbero dtoBarbero){
-        Barbero barbero = new Barbero();
-        barbero.setNombre(dtoBarbero.getNombre());
-        barbero.setEstado(1);
-        barberoRepository.save(barbero);
-        horarioBarberoBaseService.crearHorarioBaseInicial(barbero.getBarbero_id());
-    }*/
-
     public List<DtoBarberoResponse> readAll(){
         List<Barbero> barberos = barberoRepository.findAll();
         return barberos.stream().filter(barbero ->
                         barbero.getEstado() == 1)
                 .map(barbero -> {
-                    DtoBarberoResponse dto = new DtoBarberoResponse();
-                    dto.setBarbero_id(barbero.getBarbero_id());
-                    dto.setNombre(barbero.getNombre());
-                    dto.setUrlBarbero(barbero.getUrlBarbero());
+                    DtoBarberoResponse dto = BarberoMapper.toDto(barbero);
                     return dto;
                 }).toList();
     }
@@ -90,10 +80,7 @@ public class BarberoService {
     public DtoBarberoResponse readOne(Long id){
         Barbero barbero = barberoRepository.findById(id)
                 .orElseThrow(() -> new BarberoNoEncontradoException(MensajeError.BARBERO_NO_ENCONTRADO));
-        DtoBarberoResponse dto = new DtoBarberoResponse();
-        dto.setBarbero_id(barbero.getBarbero_id());
-        dto.setNombre(barbero.getNombre());
-        dto.setUrlBarbero(barbero.getUrlBarbero());
+        DtoBarberoResponse dto = BarberoMapper.toDto(barbero);
         return dto;
     }
 }

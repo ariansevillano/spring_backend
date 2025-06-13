@@ -1,7 +1,4 @@
 package cl.javadevs.springsecurityjwt.controllers;
-
-import cl.javadevs.springsecurityjwt.dtos.barbero.request.DtoBarbero;
-import cl.javadevs.springsecurityjwt.dtos.barbero.response.DtoBarberoResponse;
 import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
 import cl.javadevs.springsecurityjwt.dtos.usuario.request.DtoUsuario;
 import cl.javadevs.springsecurityjwt.dtos.usuario.response.DtoUsuarioResponse;
@@ -73,6 +70,21 @@ public class RestControllerUsuario {
         usuarioService.update(id,dtoUsuario,imagen);
         DtoUsuarioResponse dtoResponse = usuarioService.readOne(id);
         return ResponseEntity.ok(ApiResponse.succes("Usuario Actualizado exitosamente",dtoResponse));
+    }
+
+    @PutMapping(value = "actualizar-mi-perfil", headers = "Accept=application/json")
+    public ResponseEntity<ApiResponse<Object>> actualizarMiPerfil(
+            @RequestPart @Valid DtoUsuario dtoUsuario,
+            @RequestPart(value = "imagen", required = false) MultipartFile imagen,
+            Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
+        usuarioService.updateByAuth(dtoUsuario, imagen, authentication);
+        DtoUsuarioResponse dtoResponse = usuarioService.readOneByAuth(authentication);
+        return ResponseEntity.ok(ApiResponse.succes("Usuario actualizado exitosamente", dtoResponse));
     }
 
 

@@ -16,5 +16,7 @@ public class DtoReservaResponse {
     private String adicionales;       // Lo pone el usuario
     private LocalDateTime fechaCreacion;
     private LocalDate fechaReserva;
+    private String servicioNombre;
+    private Long precioServicio;
     private String urlPago;
 }

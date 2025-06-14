@@ -32,6 +32,7 @@ public class ReservaService {
     private final IUsuariosRepository usuariosRepository;
     private final IBarberoRepository barberoRepository;
     private final CloudinaryService cloudinaryService;
+    private final IServicioRepository servicioRepository;
 
     public List<DtoBarberoDisponible> listarBarberosDisponibles(LocalDate fecha, Long tipoHorarioId, Long horarioRangoId) {
         // 1. Barberos que trabajan ese día y tipoHorario
@@ -68,6 +69,8 @@ public class ReservaService {
                 .orElseThrow(() -> new RuntimeException("Barbero no encontrado"));
         HorarioRango horarioRango = horarioRangoRepository.findById(dto.getHorarioRangoId())
                 .orElseThrow(() -> new RuntimeException("HorarioRango no encontrado"));
+        Servicio servicio = servicioRepository.findById(dto.getServicioId())
+                .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
 
         // Verificar si ya existe reserva para ese barbero, fecha y rango
         boolean existe = reservaRepository.existsByBarberoAndFechaReservaAndHorarioRango(
@@ -78,6 +81,8 @@ public class ReservaService {
         reserva.setBarbero(barbero);
         reserva.setUsuario(usuario);
         reserva.setHorarioRango(horarioRango);
+        reserva.setServicio(servicio);
+        reserva.setPrecioServicio(servicio.getPrecio()); // Guardar precio histórico
         reserva.setEstado(EstadoReserva.CREADA);
         reserva.setAdicionales(dto.getAdicionales());
         reserva.setFechaCreacion(LocalDateTime.now());
@@ -125,6 +130,8 @@ public class ReservaService {
             dto.setFechaCreacion(reserva.getFechaCreacion());
             dto.setFechaReserva(reserva.getFechaReserva());
             dto.setUrlPago(reserva.getUrlPago());
+            dto.setServicioNombre(reserva.getServicio().getNombre());
+            dto.setPrecioServicio(reserva.getPrecioServicio());
             return dto;
         }).toList();
     }
@@ -157,6 +164,8 @@ public class ReservaService {
             dto.setFechaCreacion(reserva.getFechaCreacion());
             dto.setFechaReserva(reserva.getFechaReserva());
             dto.setUrlPago(reserva.getUrlPago());
+            dto.setServicioNombre(reserva.getServicio().getNombre());
+            dto.setPrecioServicio(reserva.getPrecioServicio());
             return dto;
         }).toList();
     }

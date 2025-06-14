@@ -10,7 +10,7 @@
     </parent>
     <groupId>cl.javadevs</groupId>
     <artifactId>Spring-Security-JWT</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-RELEASE</version>
     <name>Spring-Security-JWT</name>
     <description>Spring-Security-JWT</description>
     <properties>

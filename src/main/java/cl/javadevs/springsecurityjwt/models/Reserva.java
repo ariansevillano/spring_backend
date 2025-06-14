@@ -41,6 +41,13 @@ public class Reserva {
     @Column(nullable = false)
     private EstadoReserva estado;
 
+    @ManyToOne
+    @JoinColumn(name = "servicio_id", nullable = false)
+    private Servicio servicio;
+
+    @Column(nullable = false)
+    private Long precioServicio;
+
     // Motivo (opcional)
     @Column(nullable = true)
     private String motivoDescripcion;

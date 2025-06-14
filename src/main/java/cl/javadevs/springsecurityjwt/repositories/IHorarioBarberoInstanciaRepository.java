@@ -14,5 +14,5 @@ public interface IHorarioBarberoInstanciaRepository extends JpaRepository<Horari
     List<HorarioBarberoInstancia> findByFechaBetween(LocalDate inicio, LocalDate fin);
 
     // Busca barberos que trabajan ese día y rango
-    List<HorarioBarberoInstancia> findByFechaAndTipoHorario_TipoHorario_id(LocalDate fecha, Long tipoHorarioId);
+    List<HorarioBarberoInstancia> findByFechaAndTipoHorario_Id(LocalDate fecha, Long id);
 }

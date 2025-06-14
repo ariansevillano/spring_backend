@@ -36,7 +36,7 @@ public class ReservaService {
     public List<DtoBarberoDisponible> listarBarberosDisponibles(LocalDate fecha, Long tipoHorarioId, Long horarioRangoId) {
         // 1. Barberos que trabajan ese día y tipoHorario
         List<HorarioBarberoInstancia> instancias = horarioBarberoInstanciaRepository
-                .findByFechaAndTipoHorario_TipoHorario_id(fecha, tipoHorarioId);
+                .findByFechaAndTipoHorario_Id(fecha, tipoHorarioId);
 
         // 2. Reservas existentes para ese día y rango
         HorarioRango horarioRango = horarioRangoRepository.findById(horarioRangoId)

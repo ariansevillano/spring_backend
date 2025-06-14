@@ -67,7 +67,7 @@ public class HorarioBarberoBaseService {
         List<HorarioBarberoBase> registrosDia = horarioBarberoBaseRepository.findByDia(dia);
 
         for (HorarioBarberoBase registro : registrosDia){
-            Long tipoHorarioId = registro.getTipoHorario().getTipoHorario_id();
+            Long tipoHorarioId = registro.getTipoHorario().getId();
             Long barberoId = registro.getBarbero().getBarbero_id();
 
             List<Long> barberosAsignados = turnosPorTipo.getOrDefault(tipoHorarioId,List.of());

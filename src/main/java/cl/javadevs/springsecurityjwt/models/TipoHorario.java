@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 public class TipoHorario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tipoHorario_Id")
-    private Long tipoHorario_id;
+    @Column(name = "tipoHorario_id")
+    private Long id;
     @Column(nullable = false)
     private String nombre;
 }

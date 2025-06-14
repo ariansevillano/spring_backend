@@ -12,4 +12,7 @@ public interface IHorarioBarberoInstanciaRepository extends JpaRepository<Horari
     void deleteByFechaBetween(LocalDate desde, LocalDate hasta);
 
     List<HorarioBarberoInstancia> findByFechaBetween(LocalDate inicio, LocalDate fin);
+
+    // Busca barberos que trabajan ese día y rango
+    List<HorarioBarberoInstancia> findByFechaAndTipoHorario_TipoHorario_id(LocalDate fecha, Long tipoHorarioId);
 }

@@ -88,6 +88,15 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/api/usuario/listar").hasAnyAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/api/usuario/listarId/**").hasAnyAuthority("ADMIN","USER")
                 .requestMatchers(HttpMethod.PUT,"/api/usuario/actualizar/**").hasAnyAuthority("ADMIN", "USER")
+                // Reservas: solo USER puede crear y subir comprobante
+                .requestMatchers(HttpMethod.POST, "/api/reserva/crear").hasAuthority("USER")
+                .requestMatchers(HttpMethod.POST, "/api/reserva/subir-comprobante/**").hasAuthority("USER")
+                // Reservas: solo ADMIN puede listar y cambiar estado
+                .requestMatchers(HttpMethod.GET, "/api/reserva/admin/listar").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/reserva/admin/cambiar-estado/**").hasAuthority("ADMIN")
+                // Barberos disponibles: tanto USER como ADMIN pueden consultar
+                .requestMatchers(HttpMethod.GET, "/api/barbero/barberos-disponibles").hasAnyAuthority("USER", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/reserva/mis-reservas").hasAuthority("USER")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

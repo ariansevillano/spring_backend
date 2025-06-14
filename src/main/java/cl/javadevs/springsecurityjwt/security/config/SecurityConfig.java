@@ -95,7 +95,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/reserva/admin/listar").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/reserva/admin/cambiar-estado/**").hasAuthority("ADMIN")
                 // Barberos disponibles: tanto USER como ADMIN pueden consultar
-                .requestMatchers(HttpMethod.GET, "/api/barbero/barberos-disponibles").hasAnyAuthority("USER", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/reserva/barberos-disponibles").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/reserva/mis-reservas").hasAuthority("USER")
                 .anyRequest().authenticated()
                 .and()

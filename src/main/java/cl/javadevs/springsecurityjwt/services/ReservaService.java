@@ -100,10 +100,18 @@ public class ReservaService {
     }
 
 
-    public List<DtoReservaResponse> listarReservas(LocalDate fecha) {
-        List<Reserva> reservas = (fecha == null)
-                ? reservaRepository.findAll()
-                : reservaRepository.findByFechaReserva(fecha);
+    public List<DtoReservaResponse> listarReservas(LocalDate fecha, EstadoReserva estado) {
+        List<Reserva> reservas;
+
+        if (fecha != null && estado != null) {
+            reservas = reservaRepository.findByFechaReservaAndEstado(fecha, estado);
+        } else if (fecha != null) {
+            reservas = reservaRepository.findByFechaReserva(fecha);
+        } else if (estado != null) {
+            reservas = reservaRepository.findByEstado(estado);
+        } else {
+            reservas = reservaRepository.findAll();
+        }
 
         return reservas.stream().map(reserva -> {
             DtoReservaResponse dto = new DtoReservaResponse();

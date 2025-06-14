@@ -51,8 +51,9 @@ public class RestControllerReserva {
 
     @GetMapping("admin/listar")
     public ResponseEntity<List<DtoReservaResponse>> listarReservas(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
-        List<DtoReservaResponse> reservas = reservaService.listarReservas(fecha);
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
+            @RequestParam(required = false) EstadoReserva estado) {
+        List<DtoReservaResponse> reservas = reservaService.listarReservas(fecha, estado);
         return ResponseEntity.ok(reservas);
     }
 

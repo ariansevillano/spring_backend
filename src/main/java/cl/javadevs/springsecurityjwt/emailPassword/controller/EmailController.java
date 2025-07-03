@@ -6,6 +6,7 @@ import cl.javadevs.springsecurityjwt.emailPassword.service.EmailService;
 import cl.javadevs.springsecurityjwt.models.Usuario;
 import cl.javadevs.springsecurityjwt.repositories.IUsuariosRepository;
 import cl.javadevs.springsecurityjwt.services.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,15 +18,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/emailPassword/")
+@RequiredArgsConstructor
 @CrossOrigin
 public class EmailController {
 
-    EmailService emailService;
-
-    @Autowired
-    public EmailController(EmailService emailService){
-        this.emailService=emailService;
-    }
+    private final EmailService emailService;
 
     @PostMapping("sendEmail")
     public ResponseEntity<ApiResponse<Object>> sendEmail(@RequestBody EmailDto emaildto){

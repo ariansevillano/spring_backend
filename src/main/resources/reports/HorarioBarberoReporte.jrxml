@@ -36,7 +36,7 @@
             <textField>
                 <reportElement x="0" y="-10" width="555" height="60" uuid="c16d0ff6-da9b-486b-ab6f-6d63cedafc96"/>
                 <textElement textAlignment="Center">
-                    <font fontName="Arial Black" size="16" isBold="true"/>
+                    <font fontName="SansSerif" size="16"/>
                 </textElement>
                 <textFieldExpression><![CDATA["Reporte de Horarios Semanales desde "+$P{FechaInicio}+" hasta "+$P{FechaFin}]]></textFieldExpression>
             </textField>
@@ -53,7 +53,7 @@
                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font fontName="Arial Black"/>
+                    <font fontName="SansSerif"/>
                 </textElement>
                 <text><![CDATA[Dia]]></text>
             </staticText>
@@ -66,7 +66,7 @@
                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font fontName="Arial Black"/>
+                    <font fontName="SansSerif"/>
                 </textElement>
                 <text><![CDATA[Turno]]></text>
             </staticText>
@@ -79,7 +79,7 @@
                     <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
                 </box>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font fontName="Arial Black"/>
+                    <font fontName="SansSerif"/>
                 </textElement>
                 <text><![CDATA[Barberos]]></text>
             </staticText>

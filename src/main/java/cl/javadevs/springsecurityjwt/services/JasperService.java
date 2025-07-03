@@ -20,7 +20,7 @@ public class JasperService {
     private final DataSource dataSource;
 
     public byte[] exportarHorario(Date fechaInicio, Date fechaFin) throws Exception {
-        //Cargar el archivo jrxml
+
         InputStream reportStream = new ClassPathResource("reports/HorarioBarberoReporte.jrxml").getInputStream();
         JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
         //parámetros

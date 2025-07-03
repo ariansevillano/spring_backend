@@ -64,6 +64,9 @@ public class Reserva {
     @Column(nullable = false)
     private LocalDate fechaReserva;
 
+    @Column(nullable = true)
+    private Integer estRecompensa;
+
     // URL de pago (opcional)
     @Column(nullable = true)
     private String urlPago;

@@ -97,6 +97,8 @@ public class SecurityConfig {
                 // Barberos disponibles: tanto USER como ADMIN pueden consultar
                 .requestMatchers(HttpMethod.GET, "/api/reserva/barberos-disponibles").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/reserva/mis-reservas").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET,"api/reserva/consultarRecompensa").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET,"api/reserva/crearReservaRecompensa").hasAuthority("USER")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

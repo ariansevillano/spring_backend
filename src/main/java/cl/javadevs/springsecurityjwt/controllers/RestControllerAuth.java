@@ -28,7 +28,6 @@ public class RestControllerAuth {
 
     private final AuthService authService;
 
-    //endpoint mejorado para crear un usuario tipo USER
     @PostMapping("register")
     public ResponseEntity<ApiResponse<Object>> registrar(@RequestBody DtoRegistro dtoRegistro, Authentication authentication){
 
@@ -52,7 +51,6 @@ public class RestControllerAuth {
     }
 
 
-    //Método para poder guardar usuarios de tipo ADMIN con token
     @PostMapping("v1/registerAdm")
     public ResponseEntity<ApiResponse<Object>> registrarAdmin(@RequestBody DtoRegistro dtoRegistro, Authentication authentication ) {
 
@@ -75,7 +73,6 @@ public class RestControllerAuth {
 
     }
 
-    //Método para poder guardar usuarios de tipo ADMIN sin token
     @PostMapping("v2/registerAdm")
     public ResponseEntity<ApiResponse<Object>> registrarAdmin2(@RequestBody DtoRegistro dtoRegistro, Authentication authentication ) {
         try {
@@ -92,7 +89,6 @@ public class RestControllerAuth {
 
     }
 
-    //endpoint para login
     @PostMapping("login")
     public ResponseEntity<ApiResponse<Object>> login(@RequestBody @Valid DtoLogin dtoLogin) {
         try {

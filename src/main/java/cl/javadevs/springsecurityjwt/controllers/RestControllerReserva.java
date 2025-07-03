@@ -6,6 +6,7 @@ import cl.javadevs.springsecurityjwt.dtos.reserva.request.DtoReserva;
 import cl.javadevs.springsecurityjwt.dtos.reserva.response.DtoReservaResponse;
 import cl.javadevs.springsecurityjwt.services.ReservaService;
 import cl.javadevs.springsecurityjwt.util.EstadoReserva;
+import com.cloudinary.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -72,5 +73,19 @@ public class RestControllerReserva {
     public ResponseEntity<List<DtoReservaResponse>> listarMisReservas(Authentication authentication) {
         List<DtoReservaResponse> reservas = reservaService.listarReservasPorUsuario(authentication);
         return ResponseEntity.ok(reservas);
+    }
+
+    @GetMapping("consultarRecompensa")
+    public ResponseEntity<ApiResponse<Boolean>> consultarRecompensa(Authentication authentication) {
+        Boolean estado = reservaService.buscarReservasRecompensa(authentication);
+        return ResponseEntity.ok(ApiResponse.succes("Estado enviado",estado));
+    }
+
+    @PostMapping("crearReservaRecompensa")
+    public ResponseEntity<ApiResponse<Object>> crearReservaRecompensa(
+            @RequestBody DtoReserva dto,
+            Authentication authentication) {
+        reservaService.crearReservaRecompensa(dto,authentication);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.succes("Reserva creada correctamente", null));
     }
 }

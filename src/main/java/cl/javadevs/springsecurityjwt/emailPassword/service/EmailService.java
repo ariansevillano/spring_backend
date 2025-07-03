@@ -8,6 +8,7 @@ import cl.javadevs.springsecurityjwt.repositories.IUsuariosRepository;
 import cl.javadevs.springsecurityjwt.util.MensajeError;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,18 +23,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-
+@RequiredArgsConstructor
 public class EmailService {
-    private JavaMailSender javaMailSender;
-    private TemplateEngine templateEngine;
-    private IUsuariosRepository usuariosRepository;
-    @Autowired
-    public EmailService (JavaMailSender javaMailSender, TemplateEngine templateEngine,
-                         IUsuariosRepository usuariosRepository){
-        this.javaMailSender=javaMailSender;
-        this.templateEngine=templateEngine;
-        this.usuariosRepository=usuariosRepository;
-    }
+
+    private final JavaMailSender javaMailSender;
+    private final TemplateEngine templateEngine;
+    private final IUsuariosRepository usuariosRepository;
 
     @Value("${mail.urlFront}")
     private String urlFront;

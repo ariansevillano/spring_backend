@@ -101,5 +101,4 @@ public class RestControllerBarbero {
         return ResponseEntity.ok(ApiResponse.succes("Barbero Deshabilitado exitosamente",null));
     }
 
-
 }

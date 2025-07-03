@@ -88,6 +88,7 @@ public class ReservaService {
         reserva.setFechaCreacion(LocalDateTime.now());
         reserva.setFechaReserva(dto.getFechaReserva());
         reserva.setUrlPago(null);
+        reserva.setEstRecompensa(0);
         reservaRepository.save(reserva);
     }
 
@@ -132,6 +133,7 @@ public class ReservaService {
             dto.setUrlPago(reserva.getUrlPago());
             dto.setServicioNombre(reserva.getServicio().getNombre());
             dto.setPrecioServicio(reserva.getPrecioServicio());
+            dto.setEstRecompensa(reserva.getEstRecompensa());
             return dto;
         }).toList();
     }
@@ -165,8 +167,39 @@ public class ReservaService {
             dto.setFechaReserva(reserva.getFechaReserva());
             dto.setUrlPago(reserva.getUrlPago());
             dto.setServicioNombre(reserva.getServicio().getNombre());
+            dto.setEstRecompensa(reserva.getEstRecompensa());
             dto.setPrecioServicio(reserva.getPrecioServicio());
             return dto;
         }).toList();
+    }
+
+    public Boolean buscarReservasRecompensa(Authentication authentication) {
+        Boolean estado;
+        List<Reserva> reservas = filtradoReservasRecompensa(authentication);
+        if (reservas.size() >= 7) {
+            estado = true;
+            return estado;
+        } else {
+            estado = false;
+            return estado;
+        }
+    }
+
+    public List<Reserva> filtradoReservasRecompensa(Authentication authentication){
+        Usuario usuario = usuariosRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new UsuarioExistenteException(MensajeError.USUARIO_NO_EXISTENTE));
+        List<Reserva> reservas = reservaRepository.findByUsuario(usuario);
+        return reservas = reservas.stream()
+                .filter(e -> e.getEstRecompensa() == 0)
+                .collect(Collectors.toList());
+    }
+
+    public void crearReservaRecompensa(DtoReserva dto, Authentication authentication) {
+        List<Reserva> reservas = filtradoReservasRecompensa(authentication);
+        for (Reserva reserva : reservas ) {
+            reserva.setEstRecompensa(1);
+            reservaRepository.save(reserva);
+        }
+        crearReserva(dto, authentication);
     }
 }

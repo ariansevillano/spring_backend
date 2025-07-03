@@ -54,14 +54,12 @@ public class BarberoService {
                 }).toList();
     }
 
-
     public void deshabilitar(Long id) {
         Barbero barbero = barberoRepository.findById(id)
                 .orElseThrow(() -> new BarberoNoEncontradoException("Barbero no encontrado con el id: " + id));
         barbero.setEstado(0);
         barberoRepository.save(barbero);
     }
-
 
     public void update(Long id,DtoBarbero dtoBarbero,MultipartFile imagen){
         Barbero barbero = barberoRepository.findById(id)

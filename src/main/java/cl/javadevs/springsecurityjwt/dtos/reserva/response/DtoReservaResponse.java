@@ -18,5 +18,6 @@ public class DtoReservaResponse {
     private LocalDate fechaReserva;
     private String servicioNombre;
     private Long precioServicio;
+    private Integer estRecompensa;
     private String urlPago;
 }

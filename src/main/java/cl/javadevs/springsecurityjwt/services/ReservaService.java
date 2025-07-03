@@ -88,7 +88,7 @@ public class ReservaService {
         reserva.setFechaCreacion(LocalDateTime.now());
         reserva.setFechaReserva(dto.getFechaReserva());
         reserva.setUrlPago(null);
-        reserva.setEstRecompensa(0);
+        reserva.setEstRecompensa(1);
         reservaRepository.save(reserva);
     }
 
@@ -141,7 +141,12 @@ public class ReservaService {
     public void cambiarEstado(Long reservaId, EstadoReserva estado, String motivoDescripcion) {
         Reserva reserva = reservaRepository.findById(reservaId)
                 .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
-        reserva.setEstado(estado);
+        if (estado == EstadoReserva.CONFIRMADA) {
+            reserva.setEstado(estado);
+            reserva.setEstRecompensa(0);
+        } else {
+            reserva.setEstado(estado);
+        }
         // Solo el admin puede poner motivoDescripcion
         if (motivoDescripcion != null) {
             reserva.setMotivoDescripcion(motivoDescripcion);

@@ -5,6 +5,9 @@ import cl.javadevs.springsecurityjwt.dtos.barbero.response.DtoBarberoDisponible;
 import cl.javadevs.springsecurityjwt.dtos.horarioInstancia.response.DtoHorarioBarberoInstanciaResponse;
 import cl.javadevs.springsecurityjwt.dtos.reserva.request.DtoReserva;
 import cl.javadevs.springsecurityjwt.dtos.reserva.response.DtoReservaResponse;
+import cl.javadevs.springsecurityjwt.exceptions.BarberoNoEncontradoException;
+import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
+import cl.javadevs.springsecurityjwt.exceptions.TipoHorarioNoEncotradoException;
 import cl.javadevs.springsecurityjwt.exceptions.UsuarioExistenteException;
 import cl.javadevs.springsecurityjwt.models.*;
 import cl.javadevs.springsecurityjwt.repositories.*;
@@ -61,7 +64,7 @@ public class ReservaService {
                 }).toList();
     }
 
-    public void crearReserva(DtoReserva dto, Authentication authentication) {
+    public Boolean verificarDisponibilidadBarbero(DtoReserva dto, Authentication authentication) {
         String username = authentication.getName();
         Usuario usuario = usuariosRepository.findByUsername(username)
                 .orElseThrow(() -> new UsuarioExistenteException(MensajeError.USUARIO_NO_EXISTENTE));
@@ -71,6 +74,25 @@ public class ReservaService {
                 .orElseThrow(() -> new RuntimeException("HorarioRango no encontrado"));
         Servicio servicio = servicioRepository.findById(dto.getServicioId())
                 .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
+
+        // Verificar si ya existe reserva para ese barbero, fecha y rango
+        boolean existe = reservaRepository.existsByBarberoAndFechaReservaAndHorarioRango(
+                barbero, dto.getFechaReserva(), horarioRango);
+        if (existe)
+            throw new RuntimeException("El barbero ya tiene una reserva en ese horario");
+        else
+            return true;
+    }
+    public void crearReserva(DtoReserva dto, Authentication authentication, Boolean flag) {
+        String username = authentication.getName();
+        Usuario usuario = usuariosRepository.findByUsername(username)
+                .orElseThrow(() -> new UsuarioExistenteException(MensajeError.USUARIO_NO_EXISTENTE));
+        Barbero barbero = barberoRepository.findById(dto.getBarberoId())
+                .orElseThrow(() -> new BarberoNoEncontradoException(MensajeError.BARBERO_NO_ENCONTRADO));
+        HorarioRango horarioRango = horarioRangoRepository.findById(dto.getHorarioRangoId())
+                .orElseThrow(() -> new TipoHorarioNoEncotradoException(MensajeError.TIPO_HORARIO_NO_ENCOTRADO));
+        Servicio servicio = servicioRepository.findById(dto.getServicioId())
+                .orElseThrow(() -> new ServicioNoEncontradoException(MensajeError.SERVICIO_NO_ENCONTRADO));
 
         // Verificar si ya existe reserva para ese barbero, fecha y rango
         boolean existe = reservaRepository.existsByBarberoAndFechaReservaAndHorarioRango(
@@ -88,7 +110,13 @@ public class ReservaService {
         reserva.setFechaCreacion(LocalDateTime.now());
         reserva.setFechaReserva(dto.getFechaReserva());
         reserva.setUrlPago(null);
+        if (flag){
         reserva.setEstRecompensa(1);
+            reserva.setEstado(EstadoReserva.CREADA);
+        } else {
+            reserva.setEstRecompensa(1);
+            reserva.setEstado(EstadoReserva.CONFIRMADA);
+        }
         reservaRepository.save(reserva);
     }
 
@@ -123,6 +151,7 @@ public class ReservaService {
             DtoReservaResponse dto = new DtoReservaResponse();
             dto.setReservaId(reserva.getReserva_id());
             dto.setBarberoNombre(reserva.getBarbero().getNombre());
+            dto.setUsuarioId(reserva.getUsuario().getUsuario_id());
             dto.setUsuarioNombre(reserva.getUsuario().getNombre());
             dto.setHorarioRango(reserva.getHorarioRango().getRango());
             dto.setEstado(reserva.getEstado().name());
@@ -205,6 +234,6 @@ public class ReservaService {
             reserva.setEstRecompensa(1);
             reservaRepository.save(reserva);
         }
-        crearReserva(dto, authentication);
+        crearReserva(dto, authentication,false);
     }
 }

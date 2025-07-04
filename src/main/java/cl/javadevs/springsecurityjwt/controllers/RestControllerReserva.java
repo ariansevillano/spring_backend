@@ -37,7 +37,7 @@ public class RestControllerReserva {
     public ResponseEntity<ApiResponse<Object>> crearReserva(
             @RequestBody DtoReserva dto,
             Authentication authentication) {
-        reservaService.crearReserva(dto, authentication);
+        reservaService.crearReserva(dto, authentication, true);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.succes("Reserva creada correctamente", null));
     }
 

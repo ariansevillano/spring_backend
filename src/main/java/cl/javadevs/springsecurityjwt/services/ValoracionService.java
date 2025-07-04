@@ -43,6 +43,8 @@ public class ValoracionService {
             dto.setUtil(valoracion.getUtil());
             dto.setMensaje(valoracion.getMensaje());
             dto.setUsuario_nombre(valoracion.getUsuario().getNombre());
+            dto.setUsuarioId(valoracion.getUsuario().getUsuario_id());
+            dto.setCelular(valoracion.getUsuario().getCelular());
             return dto;
         }).toList();
     }

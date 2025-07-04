@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class DtoValoracionResponse {
     private Long valoracion_id;
+    private Long usuarioId;
+    private String celular;
     private Integer valoracion;
     private Boolean util;
     private String mensaje;

@@ -47,7 +47,7 @@ public class RestControllerValoracion {
         return ResponseEntity.ok(ApiResponse.succes("Lista de valoraciones obtenida correctamente",valoraciones));
     }
 
-    @GetMapping(value = "responder", headers = "Accept=application/json")
+    @GetMapping(value = "responder/{valoracionId}", headers = "Accept=application/json")
     public ResponseEntity<ApiResponse<Object>> cambiarEstado(@PathVariable Long valoracionId, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(

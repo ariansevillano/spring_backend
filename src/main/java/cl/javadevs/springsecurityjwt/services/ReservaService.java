@@ -4,6 +4,7 @@ import cl.javadevs.springsecurityjwt.cloudinaryImages.service.CloudinaryService;
 import cl.javadevs.springsecurityjwt.dtos.barbero.response.DtoBarberoDisponible;
 import cl.javadevs.springsecurityjwt.dtos.horarioInstancia.response.DtoHorarioBarberoInstanciaResponse;
 import cl.javadevs.springsecurityjwt.dtos.reserva.request.DtoReserva;
+import cl.javadevs.springsecurityjwt.dtos.reserva.response.DtoReporteResponse;
 import cl.javadevs.springsecurityjwt.dtos.reserva.response.DtoReservaResponse;
 import cl.javadevs.springsecurityjwt.exceptions.BarberoNoEncontradoException;
 import cl.javadevs.springsecurityjwt.exceptions.ServicioNoEncontradoException;
@@ -262,4 +263,27 @@ public class ReservaService {
         }
         crearReserva(dto, authentication,false);
     }
+
+    public DtoReporteResponse obtenerReportes(LocalDate fechaInicio, LocalDate fechaFin, String servicio) {
+        List<Reserva> reservas = reservaRepository.findByFechaReservaBetweenAndEstado(fechaInicio,fechaFin,EstadoReserva.REALIZADA);
+        Integer montoTotal = 0;
+        if (servicio != null) {
+            reservas.stream()
+                    .filter(e -> e.getServicio().getNombre() == servicio)
+                    .collect(Collectors.toList());
+           montoTotal = calcularGanancia(reservas);
+           DtoReporteResponse dto = new DtoReporteResponse();
+           dto.setServicioNombre(servicio);
+           dto.setMontoTotal(montoTotal);
+           return dto;
+        } else {
+            montoTotal = calcularGanancia(reservas);
+            DtoReporteResponse dto = new DtoReporteResponse();
+            dto.setServicioNombre(servicio);
+            dto.setMontoTotal(montoTotal);
+            return dto;
+        }
+    }
+
+
 }

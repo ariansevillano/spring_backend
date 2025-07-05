@@ -37,13 +37,24 @@ public class RestControllerValoracion {
     }
 
     @GetMapping(value = "listar", headers = "Accept=application/json")
-    public ResponseEntity<ApiResponse<List<DtoValoracionResponse>>>listarValoracion(Authentication authentication) {
+    public ResponseEntity<ApiResponse<List<DtoValoracionResponse>>> listarValoracion(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
             );
         }
-        List<DtoValoracionResponse> valoraciones = valoracionService.readAll();
+        List<DtoValoracionResponse> valoraciones = valoracionService.listarValoraciones();
         return ResponseEntity.ok(ApiResponse.succes("Lista de valoraciones obtenida correctamente",valoraciones));
+    }
+
+    @GetMapping(value = "responder", headers = "Accept=application/json")
+    public ResponseEntity<ApiResponse<Object>> cambiarEstado(@PathVariable Long valoracionId, Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("El token es inválido o ha expirado. Por favor, inicia sesión nuevamente.", null)
+            );
+        }
+        valoracionService.cambiarEstado(valoracionId);
+        return ResponseEntity.ok(ApiResponse.succes("Valoración respondida", null));
     }
 }

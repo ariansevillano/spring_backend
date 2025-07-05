@@ -134,11 +134,25 @@ public class ReservaService {
     }
 
 
-    public List<DtoReservaResponse> listarReservas(LocalDate fecha, EstadoReserva estado) {
+    public List<DtoReservaResponse> listarReservas(LocalDate fecha, EstadoReserva estado, Long usuarioId) {
+
         List<Reserva> reservas;
+        if (usuarioId != null){
+            Usuario usuario = usuariosRepository.findById(usuarioId)
+                    .orElseThrow(() -> new UsuarioExistenteException(MensajeError.USUARIO_NO_EXISTENTE));
+            if (fecha != null && estado != null) {
+                reservas = reservaRepository.findByFechaReservaAndEstadoAndUsuario(fecha,estado,usuario);
+            } else if (estado != null) {
+                reservas = reservaRepository.findByEstadoAndUsuario(estado,usuario);
+            } else if (fecha != null){
+                reservas = reservaRepository.findByFechaReservaAndUsuario(fecha,usuario);
+            } else {
+                reservas = reservaRepository.findByUsuario(usuario);
+            }
+        }
 
         if (fecha != null && estado != null) {
-            reservas = reservaRepository.findByFechaReservaAndEstado(fecha, estado);
+            reservas = reservaRepository.findByFechaReservaAndEstado(fecha,estado);
         } else if (fecha != null) {
             reservas = reservaRepository.findByFechaReserva(fecha);
         } else if (estado != null) {

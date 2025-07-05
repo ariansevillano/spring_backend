@@ -20,54 +20,33 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reserva_id")
     private Long reserva_id;
-
     // Relación con Barbero
     @ManyToOne
     @JoinColumn(name = "barbero_id", nullable = false)
     private Barbero barbero;
-
     // Relación con Usuario
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
-
     // Relación con HorarioRango
     @ManyToOne
     @JoinColumn(name = "horarioRango_id", nullable = false)
     private HorarioRango horarioRango;
-
-    // Estado de la reserva
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EstadoReserva estado;
-
     @ManyToOne
     @JoinColumn(name = "servicio_id", nullable = false)
     private Servicio servicio;
-
     @Column(nullable = false)
     private Long precioServicio;
-
-    // Motivo (opcional)
-    @Column(nullable = true)
     private String motivoDescripcion;
-
-    // Adicionales (opcional)
-    @Column(nullable = true)
     private String adicionales;
-
     // Fecha de creación de la reserva
     @Column(nullable = false)
     private LocalDateTime fechaCreacion;
-
-    // Fecha para la que se reserva el servicio
     @Column(nullable = false)
     private LocalDate fechaReserva;
-
-    @Column(nullable = true)
     private Integer estRecompensa;
-
-    // URL de pago (opcional)
-    @Column(nullable = true)
     private String urlPago;
 }

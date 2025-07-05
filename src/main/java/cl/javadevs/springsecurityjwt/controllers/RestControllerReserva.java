@@ -4,6 +4,7 @@ import cl.javadevs.springsecurityjwt.dtos.barbero.response.DtoBarberoDisponible;
 import cl.javadevs.springsecurityjwt.dtos.common.ApiResponse;
 import cl.javadevs.springsecurityjwt.dtos.reserva.request.DtoReserva;
 import cl.javadevs.springsecurityjwt.dtos.reserva.response.DtoReservaResponse;
+import cl.javadevs.springsecurityjwt.models.Usuario;
 import cl.javadevs.springsecurityjwt.services.ReservaService;
 import cl.javadevs.springsecurityjwt.util.EstadoReserva;
 import com.cloudinary.Api;
@@ -53,8 +54,9 @@ public class RestControllerReserva {
     @GetMapping("admin/listar")
     public ResponseEntity<List<DtoReservaResponse>> listarReservas(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
-            @RequestParam(required = false) EstadoReserva estado) {
-        List<DtoReservaResponse> reservas = reservaService.listarReservas(fecha, estado);
+            @RequestParam(required = false) EstadoReserva estado,
+            @RequestParam(required = false) Long usuarioId ) {
+        List<DtoReservaResponse> reservas = reservaService.listarReservas(fecha, estado,usuarioId);
         return ResponseEntity.ok(reservas);
     }
 

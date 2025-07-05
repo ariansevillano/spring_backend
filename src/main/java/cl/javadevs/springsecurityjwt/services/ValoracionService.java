@@ -31,12 +31,15 @@ public class ValoracionService {
         valoracion.setUtil(dtoValoracion.getUtil());
         valoracion.setMensaje(dtoValoracion.getMensaje());
         valoracion.setUsuario(usuario);
+        valoracion.setEstado(1);
         valoracionRepository.save(valoracion);
     }
 
-    public List<DtoValoracionResponse> readAll() {
+    public List<DtoValoracionResponse> listarValoraciones() {
         List<Valoracion> valoracions = valoracionRepository.findAll();
-        return valoracions.stream().map(valoracion -> {
+        return valoracions.stream()
+                .filter(e -> e.getEstado() == 1)
+                .map(valoracion -> {
             DtoValoracionResponse dto = new DtoValoracionResponse();
             dto.setValoracion_id(valoracion.getValoracion_id());
             dto.setValoracion(valoracion.getValoracion());
@@ -47,5 +50,12 @@ public class ValoracionService {
             dto.setCelular(valoracion.getUsuario().getCelular());
             return dto;
         }).toList();
+    }
+
+    public void cambiarEstado(Long valoracionId){
+        Valoracion valoracion = valoracionRepository.findById(valoracionId)
+                .orElseThrow(() -> new RuntimeException("Valoración no encontrada"));
+        valoracion.setEstado(0);
+        valoracionRepository.save(valoracion);
     }
 }

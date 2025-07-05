@@ -19,4 +19,7 @@ public interface IReservaRepository extends JpaRepository<Reserva,Long> {
     List<Reserva> findByUsuario(Usuario usuario);
     List<Reserva> findByEstado(EstadoReserva estado);
     List<Reserva> findByFechaReservaAndEstado(LocalDate fecha, EstadoReserva estado);
+    List<Reserva> findByFechaReservaAndEstadoAndUsuario(LocalDate fecha, EstadoReserva estado, Usuario usuario);
+    List<Reserva> findByFechaReservaAndUsuario(LocalDate fecha, Usuario usuario);
+    List<Reserva> findByEstadoAndUsuario(EstadoReserva estado, Usuario usuario);
 }

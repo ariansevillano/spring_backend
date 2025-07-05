@@ -267,20 +267,25 @@ public class ReservaService {
     public DtoReporteResponse obtenerReportes(LocalDate fechaInicio, LocalDate fechaFin, String servicio) {
         List<Reserva> reservas = reservaRepository.findByFechaReservaBetweenAndEstado(fechaInicio,fechaFin,EstadoReserva.REALIZADA);
         Integer montoTotal = 0;
+        Integer cantidadReservas = 0;
         if (servicio != null) {
             reservas.stream()
                     .filter(e -> e.getServicio().getNombre() == servicio)
                     .collect(Collectors.toList());
            montoTotal = calcularGanancia(reservas);
+           cantidadReservas = reservas.size();
            DtoReporteResponse dto = new DtoReporteResponse();
            dto.setServicioNombre(servicio);
            dto.setMontoTotal(montoTotal);
+           dto.setCantidadReservas(cantidadReservas);
            return dto;
         } else {
             montoTotal = calcularGanancia(reservas);
+            cantidadReservas = reservas.size();
             DtoReporteResponse dto = new DtoReporteResponse();
             dto.setServicioNombre(servicio);
             dto.setMontoTotal(montoTotal);
+            dto.setCantidadReservas(cantidadReservas);
             return dto;
         }
     }

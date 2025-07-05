@@ -149,18 +149,19 @@ public class ReservaService {
             } else {
                 reservas = reservaRepository.findByUsuario(usuario);
             }
-        }
-
-        if (fecha != null && estado != null) {
-            reservas = reservaRepository.findByFechaReservaAndEstado(fecha,estado);
-        } else if (fecha != null) {
-            reservas = reservaRepository.findByFechaReserva(fecha);
-        } else if (estado != null) {
-            reservas = reservaRepository.findByEstado(estado);
         } else {
-            reservas = reservaRepository.findAll();
-        }
 
+            if (fecha != null && estado != null) {
+                reservas = reservaRepository.findByFechaReservaAndEstado(fecha,estado);
+            } else if (fecha != null) {
+                reservas = reservaRepository.findByFechaReserva(fecha);
+            } else if (estado != null) {
+                reservas = reservaRepository.findByEstado(estado);
+            } else {
+                reservas = reservaRepository.findAll();
+            }
+        }
+        Integer montoTotal = calcularGanancia(reservas);
         return reservas.stream().map(reserva -> {
             DtoReservaResponse dto = new DtoReservaResponse();
             dto.setReservaId(reserva.getReserva_id());
@@ -177,8 +178,19 @@ public class ReservaService {
             dto.setServicioNombre(reserva.getServicio().getNombre());
             dto.setPrecioServicio(reserva.getPrecioServicio());
             dto.setEstRecompensa(reserva.getEstRecompensa());
+            dto.setMontoTotal(montoTotal);
             return dto;
         }).toList();
+    }
+
+    public Integer calcularGanancia(List<Reserva> reservas){
+        int montoTotal = 0;
+        reservas.stream().filter(e -> e.getEstado() == EstadoReserva.REALIZADA)
+                .collect(Collectors.toList());
+        for (Reserva r : reservas) {
+            montoTotal += r.getPrecioServicio();
+        }
+        return montoTotal;
     }
 
     public void cambiarEstado(Long reservaId, EstadoReserva estado, String motivoDescripcion) {
